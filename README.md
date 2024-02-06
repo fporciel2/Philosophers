@@ -47,18 +47,18 @@ the control and regulation of resources, ensuring equitable access and preventin
 
 ### Implementation details
 
-'pthread_create' is used to spawn threads representing each philosopher. Each thread simulates the philosopher's actions - thinking, picking up forks, eating, and putting down forks.
+`pthread_create` is used to spawn threads representing each philosopher. Each thread simulates the philosopher's actions - thinking, picking up forks, eating, and putting down forks.
 Before starting the threads, a mutex is initialized for each fork. This is crucial for preventing two philosophers from accessing the same fork simultaneously.
 The lifecycle of a philosopher is implimented as a loop that represents cycles of thinking, attempting to pick up forks (locking the corresponding mutexes), eating, then releasing the forks (unlocking the mutexes).
 To prevent deadlock and starvation, the basic approach chosen is the philosopher picking up the lower-numbered fork first, with some extensions.
 To gracefully terminate the program, synchronization criteria are adopted, and there is the possibility to stop the simulation after a certain number of meals by introducing a certain input.
 
-'pthread_create(&thread, NULL, philosopher_routine, &philosopher_id);' is the prototype used for thread creation, where 'philosopher_routine' is the function each thread will execute, simulating the philosopher's actions.
-'pthread_mutex_lock(&fork_mutex);' and 'pthread_mutex_unlock(&fork_mutex);' for acquiring and releasing forks.
+`pthread_create(&thread, NULL, philosopher_routine, &philosopher_id);` is the prototype used for thread creation, where `philosopher_routine` is the function each thread will execute, simulating the philosopher's actions.
+`pthread_mutex_lock(&fork_mutex);` and `pthread_mutex_unlock(&fork_mutex);` for acquiring and releasing forks.
 
 ### Minimal considerations
 
-The formal semantics of this code involve the principles of concurrent execution and resource allocation. The 'pthread_create' function encapsulates the creation of a concurrent execution path, while 'pthread_mutex_lock' and 'pthread_mutex_unlock'
+The formal semantics of this code involve the principles of concurrent execution and resource allocation. The `pthread_create` function encapsulates the creation of a concurrent execution path, while `pthread_mutex_lock` and `pthread_mutex_unlock`
 represent the exclusive access control to shared resources.
 The mutexes ensure that the shared resources (forks) are not accessed by more than one thread at a time, analogous to the principle of mutual exclusivity observed in certain physical systems. The timing of operations, critical in avoiding
 deadlocks and starvation, parallels concepts of synchronization and temporal coordination in physical interactions.
