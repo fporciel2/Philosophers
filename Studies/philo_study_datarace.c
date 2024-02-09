@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 14:01:46 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/09 16:01:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:33:14 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It is meant to show an example
@@ -31,7 +31,7 @@
  * https://github.com/fporciel2
  */
 /*
- * A data race is a situation in which two or more threads try toaccess the 
+ * A data race is a situation in which two or more threads try to access the 
  * same data at the same time. This can lead to an error in the final value of 
  * the data. To better understand the problem, you can see the following
  * example of a data race that leads to a race condition. In this situation, the
