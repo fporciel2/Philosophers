@@ -65,7 +65,10 @@ deadlocks and starvation, parallels concepts of synchronization and temporal coo
 
 ## Project Status
 
-As of now, *Philosophers* is in the early stages of development.
+Friday 9 February 2024:
+
+- The Wiki has now a home page, a license section and part of an introduction about main topics.
+- Now a directory stores studies about some coding practices and notions to adopt in the project. In particular, a study about data races and a study about mutexes.
 
 ## Contributing
 
