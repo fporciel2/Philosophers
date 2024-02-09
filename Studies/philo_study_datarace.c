@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 14:01:46 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/09 15:56:08 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/09 16:01:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It is meant to show an example
@@ -50,7 +50,7 @@
 
 /*
  * The second step is to define the variables that will be accessed by the
- * threads. It will be our common resource: a simple variable.
+ * threads. It will be our common resource: a simple global variable.
  */
 int	count = 0;
 
