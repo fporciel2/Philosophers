@@ -70,6 +70,11 @@ Friday 9 February 2024:
 - The Wiki has now a home page, a license section and part of an introduction about main topics.
 - Now a directory stores studies about some coding practices and notions to adopt in the project. In particular, a study about data races and a study about mutexes.
 
+Saturday 10 February 2024:
+
+- Established some milestones and general concepts about input checking and compilation.
+- Added a Makefile, a header and a C file.
+
 ## Contributing
 
 Contributions through forks are welcome.
