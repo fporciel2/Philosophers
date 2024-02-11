@@ -75,6 +75,11 @@ Saturday 10 February 2024:
 - Established some milestones and general concepts about input checking and compilation.
 - Added a Makefile, a header and a C file.
 
+Sunday 11 February 2024:
+
+- Completed the input checking functions, apart from some bugs.
+- Updated the header to include useful headers for testing and some other contents for testing.
+
 ## Contributing
 
 Contributions through forks are welcome.
