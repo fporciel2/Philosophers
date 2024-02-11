@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 14:48:47 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/11 16:19:42 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -50,6 +50,9 @@
 # include <stdint.h>
 # include <limits.h>
 # include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 /*
  * To properly use a correct number of threads, the macro MAXPHILO is defined at
  * compilation time. See the 'philo_input_check.c' file and the CC variable in

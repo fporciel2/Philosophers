@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 13:29:50 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 14:23:11 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/11 16:23:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This program is part of the Philosophers project. Its purpose is to simulate
@@ -64,7 +64,51 @@ int	main(int argc, char **argv)
 		return (write(2, "Wrong number of arguments.\n", 27) > 0);
 	argv++;
 	philo_parse(argc, argv, input);
-	if ((input[0] == 0) && (input[1] == 0) && (input[2] == 0)
-		&& (input[3] == 0))
+	if ((input[0] == 0) || (input[1] == 0) || (input[2] == 0)
+		|| (input[3] == 0))
 		return (write(2, "Wrong input.\n", 13) > 0);
+	printf("number_of_philosophers = %lu\n", input[0]);
+	printf("time_to_die = %lu\n", input[1]);
+	printf("time_to_eat = %lu\n", input[2]);
+	printf("time_to_sleep = %lu\n", input[3]);
+	if (argc == 5)
+		printf("number_of_times_each_philosopher_must_eat = %lu\n", input[4]);
+	return (0);
 }
+/*
+ * In order to test the program, the first thing to do is to "check the
+ * checker", i.e. to test the functionality of 'philo_input_check.c'.
+ * Here are some examples of input to test the checker:
+ *
+ * './philo 5 200 200 200 3'
+ * './philo 5 200 200 200 3 1'
+ * './philo 5 200 200 200 3 1 2'
+ * './philo 5 20a0 200 200 3'
+ * './philo 5 200 200 200'
+ * './philo 5 200 200'
+ * './philo 5 200'
+ * './philo lol imho rotfl gagaga'
+ *
+ * Here is the modified 'main' function to test those inputs:
+ *
+ * int	main(int argc, char **argv)
+ * {
+ * 	static uint64_t	input[5];
+ *
+ * 	argc--;
+ * 	if (argc < 4 || argc > 5)
+ * 		return (write(2, "Wrong number of arguments.\n", 27) > 0);
+ * 	argv++;
+ * 	philo_parse(argc, argv, input);
+ * 	if ((input[0] == 0) && (input[1] == 0) && (input[2] == 0)
+ * 		&& (input[3] == 0))
+ * 		return (write(2, "Wrong input.\n", 13) > 0);
+ * 	printf("Number of philosophers: %lu\n", input[0]);
+ * 	printf("Time to die: %lu\n", input[1]);
+ * 	printf("Time to eat: %lu\n", input[2]);
+ * 	printf("Time to sleep: %lu\n", input[3]);
+ * 	if (argc == 5)
+ * 		printf("Number of times each philosopher must eat: %lu\n", input[4]);
+ * 	return (0);
+ * }
+ */
