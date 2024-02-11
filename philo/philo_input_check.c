@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 14:56:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/11 15:59:20 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to check the
@@ -81,6 +81,64 @@
 
 #include "philo.h"
 /*
+ * The function 'philo_atoui64'.
+ * It is meant to convert the string into its corresponding integer value using
+ * the 'uint64_t' type. The 'uint64_t' type is defined in the 'stdint.h' header.
+ * It is used to store the value of the input number in the function.
+ * The 'uint64_t' type is a 64-bit unsigned integer type.
+ * The function returns the value represented by the string.
+ * To do the conversion, it applies an algorithm similar to a power calculator:
+ * the first thing done is to initialize the result and an iteration counter to
+ * 0, so that the first one can be used to generate the result value by addition
+ * and the second one to slide the string "from left to right". 
+ * The value of 'len' is decreased by 1 in order to represent the correct
+ * position into the decimal representation of the number. The variable 'result'
+ * is initialized to 0 to perform subsequent additions. The string is
+ * then slided using a while loop, that, for each character, applies the
+ * following instructions, if 'len' is not 0:
+ * 	- the value of 'pos' is initialized to 1;
+ * 	- it is then multiplied for 10 for 'len' times using a 'times' variable
+ * 	previously reinitialized to 'len' and decreasing it at each multiplication,
+ * 	but only if the current character is different from 48, so that no useless
+ * 	multiplications are done;
+ * 	- the value of 'digit' is initialized to 'pos'*'the value of the current
+ * 	character in the string - 48' if the character is different from 48, else it
+ * 	will simply take 0;
+ * 	- the value of 'result' is then incremented by 'digit';
+ * 	- finally, the value of 'len' is decremented and the value of 'count' is
+ * 	incremented.
+ * 	This set of instructions proceeds until 'len' reaches 0. Then, the value of
+ * 	result is simply updated by increasing it by the value of the current
+ * 	character in the string at index 'count'.
+ */
+static uint64_t	philo_atoui64(char *str, size_t len)
+{
+	uint64_t	pos;
+	uint64_t	digit;
+	uint64_t	result;
+	uint64_t	count;
+	size_t		times;
+
+	count = 0;
+	result = 0;
+	while (len != 0)
+	{
+		pos = 1;
+		times = len;
+		while ((str[count] != 48) && (times-- != 0))
+			pos *= 10;
+		if (str[count] != 48)
+			digit = (str[count] - 48) * pos;
+		else
+			digit = 0;
+		result += digit;
+		len--;
+		count++;
+	}
+	return (result + (str[count] - 48));
+}
+
+/*
  * The function 'philo_strcheck'.
  * This function is nested into the file and performs a check on the string by
  * ensuring that every character in it is an ASCII digit and that the the length
@@ -106,7 +164,7 @@ static uint64_t	philo_strcheck(char *str)
 	}
 	if ((len < 1) || (len > 20))
 		return (0);
-	return (philo_atoui64(str, len));
+	return (philo_atoui64(str, (len - 1)));
 }
 /*
  * This is the main function of the file: 'philo_parse'. As said above, it takes
