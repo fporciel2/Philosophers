@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/10 17:28:29 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/11 14:48:47 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -42,12 +42,14 @@
 /*
  * Here are the included headers.
  *
- * TO MANAGE THE INPUT ARGUMENTS are used the stdint.h and limits.h headers.
+ * TO MANAGE THE INPUT ARGUMENTS are used the stdint.h, limits.h and the
+ * stddef.h headers.
  * See the 'philo_input_check.c' file for more details.
  */
 
 # include <stdint.h>
 # include <limits.h>
+# include <stddef.h>
 /*
  * To properly use a correct number of threads, the macro MAXPHILO is defined at
  * compilation time. See the 'philo_input_check.c' file and the CC variable in
@@ -62,8 +64,10 @@
 /*
  * Here are the functions used in the program that need to be included using
  * this header.
- * The first function is 'philo_parse', from the 'philo_input_check.c' file.
+ * The first function is 'philo_parse', from the 'philo_input_check.c' file: it
+ * provides the parsing of the input arguments and their conversion into an
+ * array of integers using the 'uint64_t' type.
  */
-uint64_t	*philo_parse(int argc, char *argv[]);
+void	philo_parse(int argc, char **argv, uint64_t *input);
 
 #endif

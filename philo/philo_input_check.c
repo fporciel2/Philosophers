@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/10 17:29:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/11 14:56:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to check the
@@ -63,24 +63,73 @@
  *
  * After checking the validity of each input, if the program finds no errors, it
  * converts the alphanumeric code into an integer value using the stdint.h's
- * data type 'uint64_t' and stores it into an array of size 5*sizeof(uint64_t).
- * Then, it returns the array.
+ * data type 'uint64_t' and stores it into an array of size 5*sizeof(uint64_t),
+ * i.e. the one pointed by 'input'.
+ * Then, it returns without returning any value.
  *
  * This concept is extensible. The program does not allow values grater than the
- * UINTMAX_MAX as defined in the limits.h header file, but it is possible to
+ * ULLONG_MAX as defined in the limits.h header file, but it is possible to
  * imagine a variadic length array and a proper function to manage greater
  * values.
- * However, the program is meant to adhere to the C17 standard and to the 42
- * Norm: so, no VLAs are used and the use of realloc to should be too
- * inefficient. Furthermore, this program is meant for personal computers, so
- * the number of threads could not be so high, and increasing the timescales so
- * much would be unfair to those observing the simulation, who probably have
- * other things to do, such as living their lives happily.
+ * However, the program is meant for personal computers, fast executions and
+ * limited resouces. Furthermore, its purpose is to show the resolution
+ * algorithm for the dining's philosophers problem, not to implement this
+ * solution for every possible machine and circumstance of execution.
  *
  * The first thing to do is to include the header file of the program.
  */
 
 #include "philo.h"
 /*
- * This is the main function of the file: 'philo_parse'.
+ * The function 'philo_strcheck'.
+ * This function is nested into the file and performs a check on the string by
+ * ensuring that every character in it is an ASCII digit and that the the length
+ * of the string is not greater than 20, that is the value of the number of
+ * positions occupied by ULLONG_MAX in its representation in decimal. If this
+ * check fails, it returns 0 for the 'uint64_t' type. Otherwise, it returns the
+ * output of the atoi-like function for the 'uint64_t' type, passing the pointer
+ * to the beginning of the string and the length of the string as parameters to
+ * that. The 'size_t' type is defined in the 'stddef.h' header file and is used
+ * to store the length of the string.
  */
+
+static uint64_t	philo_strcheck(char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len] != 0)
+	{
+		if ((str[len] < 48) || (str[len] > 57))
+			return (0);
+		len++;
+	}
+	if ((len < 1) || (len > 20))
+		return (0);
+	return (philo_atoui64(str, len));
+}
+/*
+ * This is the main function of the file: 'philo_parse'. As said above, it takes
+ * the 'argv' array from the main function and returns an array of size 5*sizeof
+ * (uint64_t) that contains the values of the input arguments.
+ * The arguments are passed after decreasing the number of arguments by 1 and
+ * increasing the pointer by 1, so that the first string in the array is
+ * skipped. 
+ * For each parameter, the function extracts the string and then parses and
+ * convert it into the right integer value, that will be stored in the array.
+ * It does so by calling a function that parses the string and calls another
+ * atoi-like function for 'uint64_t' type: then, it returns the result that is
+ * assigned to the correspondent position in the array.
+ * If an error occurs, it sets all the values into the array to 0.
+ */
+
+void	philo_parse(int argc, char **argv, uint64_t *input)
+{
+	input[0] = philo_strcheck(argv[0]);
+	input[1] = philo_strcheck(argv[1]);
+	input[2] = philo_strcheck(argv[2]);
+	input[3] = philo_strcheck(argv[3]);
+	if (argc == 5)
+		input[4] = philo_strcheck(argv[4]);
+	return ;
+}
