@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 16:19:42 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/12 11:01:26 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -61,7 +61,7 @@
  */
 
 # ifndef MAXPHILO
-#  define MAXPHILO 200
+#  define MAXPHILO 400
 # endif
 
 /*

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 15:59:20 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/12 11:10:55 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to check the
@@ -137,7 +137,6 @@ static uint64_t	philo_atoui64(char *str, size_t len)
 	}
 	return (result + (str[count] - 48));
 }
-
 /*
  * The function 'philo_strcheck'.
  * This function is nested into the file and performs a check on the string by
@@ -147,13 +146,19 @@ static uint64_t	philo_atoui64(char *str, size_t len)
  * check fails, it returns 0 for the 'uint64_t' type. Otherwise, it returns the
  * output of the atoi-like function for the 'uint64_t' type, passing the pointer
  * to the beginning of the string and the length of the string as parameters to
- * that. The 'size_t' type is defined in the 'stddef.h' header file and is used
+ * that, after checking that the number of philosophers is minor than MAXPHILO /
+ * 2, minus 1: that's because each philosopher requires a subthread as an
+ * internal clock, so the maximum number of philosophers allowed must be half
+ * of the maximum number of threads allowed by the system, minus the count of
+ * the auxiliary thread.
+ * The 'size_t' type is defined in the 'stddef.h' header file and is used
  * to store the length of the string.
  */
 
 static uint64_t	philo_strcheck(char *str)
 {
-	size_t	len;
+	size_t		len;
+	uint64_t	result;
 
 	len = 0;
 	while (str[len] != 0)
@@ -164,7 +169,10 @@ static uint64_t	philo_strcheck(char *str)
 	}
 	if ((len < 1) || (len > 20))
 		return (0);
-	return (philo_atoui64(str, (len - 1)));
+	result = philo_atoui64(str, (len - 1));
+	if (result >= MAXPHILO / 2)
+		return (0);
+	return (result);
 }
 /*
  * This is the main function of the file: 'philo_parse'. As said above, it takes
