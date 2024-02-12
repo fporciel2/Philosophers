@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/12 11:01:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:12:49 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -42,13 +42,12 @@
 /*
  * Here are the included headers.
  *
- * TO MANAGE THE INPUT ARGUMENTS are used the stdint.h, limits.h and the
+ * TO MANAGE THE INPUT ARGUMENTS are used the stdint.h and the
  * stddef.h headers.
  * See the 'philo_input_check.c' file for more details.
  */
 
 # include <stdint.h>
-# include <limits.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -61,7 +60,7 @@
  */
 
 # ifndef MAXPHILO
-#  define MAXPHILO 400
+#  define MAXPHILO 402
 # endif
 
 /*

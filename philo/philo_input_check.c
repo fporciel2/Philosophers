@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/12 11:10:55 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:31:10 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to check the
@@ -110,7 +110,10 @@
  * 	This set of instructions proceeds until 'len' reaches 0. Then, the value of
  * 	result is simply updated by increasing it by the value of the current
  * 	character in the string at index 'count'.
+ * 	The block 'philo_checki64' handles the case of values greater than the
+ * 	maximum 'unit64_t' value.
  */
+
 static uint64_t	philo_atoui64(char *str, size_t len)
 {
 	uint64_t	pos;
@@ -137,6 +140,18 @@ static uint64_t	philo_atoui64(char *str, size_t len)
 	}
 	return (result + (str[count] - 48));
 }
+
+static uint64_t	philo_checkui64(char *str, size_t len)
+{
+	if ((str[0] > 49) || (str[1] > 56) || (str[2] > 52) || (str[3] > 52)
+		|| (str[4] > 54) || (str[5] > 55) || (str[6] > 52) || (str[7] > 52)
+		|| (str[8] > 48) || (str[9] > 55) || (str[10] > 51) || (str[11] > 55)
+		|| (str[12] > 48) || (str[13] > 57) || (str[14] > 53) || (str[15] > 53)
+		|| (str[16] > 49) || (str[17] > 54) || (str[18] > 49) || (str[19] > 53))
+		return (0);
+	else
+		return (philo_atoui64(str, len));
+}
 /*
  * The function 'philo_strcheck'.
  * This function is nested into the file and performs a check on the string by
@@ -146,19 +161,17 @@ static uint64_t	philo_atoui64(char *str, size_t len)
  * check fails, it returns 0 for the 'uint64_t' type. Otherwise, it returns the
  * output of the atoi-like function for the 'uint64_t' type, passing the pointer
  * to the beginning of the string and the length of the string as parameters to
- * that, after checking that the number of philosophers is minor than MAXPHILO /
- * 2, minus 1: that's because each philosopher requires a subthread as an
- * internal clock, so the maximum number of philosophers allowed must be half
- * of the maximum number of threads allowed by the system, minus the count of
- * the auxiliary thread.
+ * that.
  * The 'size_t' type is defined in the 'stddef.h' header file and is used
  * to store the length of the string.
+ * It uses the 'philo_checkui64' function to parse the strings with length of 20
+ * in order to prevent the usage of values greater than the maximum 'uint64_t'
+ * allowed.
  */
 
 static uint64_t	philo_strcheck(char *str)
 {
 	size_t		len;
-	uint64_t	result;
 
 	len = 0;
 	while (str[len] != 0)
@@ -169,10 +182,9 @@ static uint64_t	philo_strcheck(char *str)
 	}
 	if ((len < 1) || (len > 20))
 		return (0);
-	result = philo_atoui64(str, (len - 1));
-	if (result >= MAXPHILO / 2)
-		return (0);
-	return (result);
+	if (len == 20)
+		return (philo_checkui64(str, (len - 1)));
+	return (philo_atoui64(str, (len - 1)));
 }
 /*
  * This is the main function of the file: 'philo_parse'. As said above, it takes
@@ -186,16 +198,24 @@ static uint64_t	philo_strcheck(char *str)
  * It does so by calling a function that parses the string and calls another
  * atoi-like function for 'uint64_t' type: then, it returns the result that is
  * assigned to the correspondent position in the array.
+ * After the first value, it checks that the number of philosophers is minor 
+ * than MAXPHILO / 2, minus 1: that's because each philosopher requires a
+ * subthread as an internal clock, so the maximum number of philosophers
+ * allowed must be half of the maximum number of threads allowed by the system,
+ * minus the count of the auxiliary thread.
  * If an error occurs, it sets all the values into the array to 0.
  */
 
 void	philo_parse(int argc, char **argv, uint64_t *input)
 {
 	input[0] = philo_strcheck(argv[0]);
-	input[1] = philo_strcheck(argv[1]);
-	input[2] = philo_strcheck(argv[2]);
-	input[3] = philo_strcheck(argv[3]);
-	if (argc == 5)
-		input[4] = philo_strcheck(argv[4]);
+	if (input[0] < (MAXPHILO / 2))
+	{
+		input[1] = philo_strcheck(argv[1]);
+		input[2] = philo_strcheck(argv[2]);
+		input[3] = philo_strcheck(argv[3]);
+		if (argc == 5)
+			input[4] = philo_strcheck(argv[4]);
+	}
 	return ;
 }
