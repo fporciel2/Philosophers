@@ -83,6 +83,7 @@ Sunday 11 February 2024:
 Monday 12 February 2024:
 
 - Solved the bugs in the input checking functions.
+- Updated the Makefile to run basic rules and make the program work. Updated the header file to define the source for POSIX extensions and include the pthread.h header.
 
 ## Contributing
 
