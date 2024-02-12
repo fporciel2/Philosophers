@@ -80,6 +80,10 @@ Sunday 11 February 2024:
 - Completed the input checking functions, apart from some bugs.
 - Updated the header to include useful headers for testing and some other contents for testing.
 
+Monday 12 February 2024:
+
+- Solved the bugs in the input checking functions.
+
 ## Contributing
 
 Contributions through forks are welcome.
