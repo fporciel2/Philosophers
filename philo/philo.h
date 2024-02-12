@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/12 12:12:49 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/12 13:39:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -35,20 +35,27 @@
  * inclusions of the same header file in the program: this prevents multiple
  * definitions of the same function or variable, which can lead to optimization
  * errors or undefined behaviors.
+ * Another thing to define is the source to apply in order to extend the
+ * standard to the POSIX 'pthread' library.
  */
 
 #ifndef PHILO_H
 # define PHILO_H
+
+# define _DEFAULT_SOURCE
 /*
  * Here are the included headers.
  *
  * TO MANAGE THE INPUT ARGUMENTS are used the stdint.h and the
  * stddef.h headers.
  * See the 'philo_input_check.c' file for more details.
+ * TO USE POSIX EXTENTIONS (I.E. PTHREAD LIBRARY) is used, obviously, the
+ * pthread.h header.
  */
 
 # include <stdint.h>
 # include <stddef.h>
+# include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
