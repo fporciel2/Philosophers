@@ -85,6 +85,10 @@ Monday 12 February 2024:
 - Solved the bugs in the input checking functions.
 - Updated the Makefile to run basic rules and make the program work. Updated the header file to define the source for POSIX extensions and include the pthread.h header.
 
+Wednsday 14 February 2024:
+
+- Added informations about the algorithm and about deadlock and starvation to the Wiki.
+
 ## Contributing
 
 Contributions through forks are welcome.
