@@ -89,6 +89,10 @@ Wednsday 14 February 2024:
 
 - Added informations about the algorithm and about deadlock and starvation to the Wiki.
 
+Thursday 15 February 2024:
+
+- Updated the Wiki with explanations.
+
 ## Contributing
 
 Contributions through forks are welcome.
