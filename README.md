@@ -92,6 +92,7 @@ Wednsday 14 February 2024:
 Thursday 15 February 2024:
 
 - Updated the Wiki with explanations.
+- Written some macros and variables representing the main resources of the program.
 
 ## Contributing
 
