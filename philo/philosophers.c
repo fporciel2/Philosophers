@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 13:29:50 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/11 16:23:15 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:59:00 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This program is part of the Philosophers project. Its purpose is to simulate
@@ -57,7 +57,10 @@
 
 int	main(int argc, char **argv)
 {
-	static uint64_t	input[5];
+	static uint64_t			input[5];
+	static pthread_t		philosophers[PHI_THREADS];
+	static pthread_t		timers[PHI_TIMERS];
+	static pthread_mutex_t	forks[PHI_FORKS];
 
 	argc--;
 	if (argc < 4 || argc > 5)
@@ -67,12 +70,6 @@ int	main(int argc, char **argv)
 	if ((input[0] == 0) || (input[1] == 0) || (input[2] == 0)
 		|| (input[3] == 0))
 		return (write(2, "Wrong input.\n", 13) > 0);
-	printf("number_of_philosophers = %lu\n", input[0]);
-	printf("time_to_die = %lu\n", input[1]);
-	printf("time_to_eat = %lu\n", input[2]);
-	printf("time_to_sleep = %lu\n", input[3]);
-	if (argc == 5)
-		printf("number_of_times_each_philosopher_must_eat = %lu\n", input[4]);
 	return (0);
 }
 /*

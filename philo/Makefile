@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/10 17:11:21 by fporciel          #+#    #+#              #
-#    Updated: 2024/02/12 13:57:42 by fporciel         ###   ########.fr        #
+#    Updated: 2024/02/15 13:42:46 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # This is the Makefile used to compile the Philosophers program.
@@ -70,9 +70,10 @@ OBJS := $(patsubst %.c, %.o, $(SRCS))
 # of the input and to locate the header, and the libraries to include. It is
 # important to note that the linking of the 'pthread' library requires the
 # inclusion of the 'pthread.h' header into the header and the definition of the
-# default source.
+# default source. Please note that the standard applied is C11 due to the need
+# to use 'usleep', that is not allowed by C17. 
 CC := gcc
-CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror -O3 -march=native -g
+CFLAGS := -std=c11 -pedantic-errors -Wall -Wextra -Werror -O3 -march=native -g
 OPT := $(MAXPHILOS) $(INCLUDE) $(HEADER)
 LDFLAGS := -lc -lpthread
 # For readability, I will merge the variables.

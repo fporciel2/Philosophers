@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/12 13:39:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:57:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -69,6 +69,25 @@
 # ifndef MAXPHILO
 #  define MAXPHILO 402
 # endif
+/*
+ * Other three important macros are needed to make the program work:
+ * 'PHI_THREADS', 'PHI_TIMERS' and 'PHI_FORKS'. They will have the same value,
+ * that is 'MAXPHILO / 2', corresponding to the maximum number of philosophers,
+ * threads and forks allowed. They will be used to initialize the size of the 
+ * arrays that will store, respectively, the threads representing the
+ * philosophers, the threads representing the timers, and the mutexes
+ * representing the forks.
+ */
+# ifndef PHI_THREADS
+#  define PHI_THREADS (MAXPHILO / 2)
+# endif
+# ifndef PHI_TIMERS
+#  define PHI_TIMERS (MAXPHILO / 2)
+# endif
+# ifndef PHI_FORKS
+#define PHI_FORKS (MAXPHILO / 2)
+# endif
+
 
 /*
  * Here are the functions used in the program that need to be included using
