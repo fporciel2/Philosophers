@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 13:29:50 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/15 13:59:00 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 09:56:16 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This program is part of the Philosophers project. Its purpose is to simulate
@@ -53,14 +53,20 @@
  * parameter using the function 'philo_parse'. The variable 'input' is created
  * to point the memory area where the integer values corresponding to the input
  * will be stored, i.e. a static array of size 5*sizeof (uint64_t).
+ * The other variable, 'timers', is created to store the threads that will be
+ * used to simulate the dinner.
+ * It has a size of (MAXPHILO / 2), to obtain the maximum memory available. A
+ * more precise approach would use VLA according to the value of 'input[0]', or
+ * allocate enough heap memory using 'malloc'. However, avoid VLAs makes the
+ * code more portable, and avoiding 'malloc' makes the code more efficient.
+ * All the variables are then passed to 'philo_start_simulation', that
+ * initializes them and starts the threads.
  */
 
 int	main(int argc, char **argv)
 {
-	static uint64_t			input[5];
-	static pthread_t		philosophers[PHI_THREADS];
-	static pthread_t		timers[PHI_TIMERS];
-	static pthread_mutex_t	forks[PHI_FORKS];
+	static uint64_t		input[5];
+	static pthread_t	timers[PHI_TIMERS];
 
 	argc--;
 	if (argc < 4 || argc > 5)
@@ -70,7 +76,7 @@ int	main(int argc, char **argv)
 	if ((input[0] == 0) || (input[1] == 0) || (input[2] == 0)
 		|| (input[3] == 0))
 		return (write(2, "Wrong input.\n", 13) > 0);
-	return (0);
+	return (philo_start_simulation(timers, input));
 }
 /*
  * In order to test the program, the first thing to do is to "check the

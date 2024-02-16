@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/10 17:11:21 by fporciel          #+#    #+#              #
-#    Updated: 2024/02/15 13:42:46 by fporciel         ###   ########.fr        #
+#    Updated: 2024/02/16 10:14:20 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # This is the Makefile used to compile the Philosophers program.
@@ -53,7 +53,7 @@ MAXTHREADS := $(shell cat /proc/sys/kernel/threads-max)
 # Here is the variable used to store the definition of the max number of
 # philosophers allowed by the program. See the 'philo_input_check.c' file for
 # more details.
-MAXPHILOS := -DMAXPHILO=$(MAXTHREADS)
+MAXPHILOS := -DMAXTHREADS=$(MAXTHREADS)
 # Since there are no external headers to include, the only header to take into
 # account is the main Philosopher's header. Here there are the variable for the
 # compiler's inclusion option and the naming of the header.

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 15:34:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/12 12:31:10 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 10:21:50 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to check the
@@ -44,11 +44,9 @@
  * functions used do not allow the input value to be compared with the thread
  * limit per process defined by the operating system, I will define the macro
  * MAXPHILO at compilation time by automating the threads-max's retrieving using
- * the Makefile: so, the call option will have 'gcc -DMAXPHILO=$(MAXTHREADS)',
+ * the Makefile: so, the call option will have 'gcc -DMAXTHREADS=$(MAXTHREADS)',
  * where MAXTHREADS will be defined as
- * 'MAXTHREADS := $(shell cat /proc/sys/kernel/threads-max)'. This check
- * functions will also reduce this value according to the number of auxiliar
- * threads created by the program.
+ * 'MAXTHREADS := $(shell cat /proc/sys/kernel/threads-max)'.
  * Since the Philosophers program is a theoretical simulation, no other
  * limitations will be imposed on the input values, apart from positivity,
  * because a negative time value, a negative number of philosophers, or a
@@ -198,18 +196,19 @@ static uint64_t	philo_strcheck(char *str)
  * It does so by calling a function that parses the string and calls another
  * atoi-like function for 'uint64_t' type: then, it returns the result that is
  * assigned to the correspondent position in the array.
- * After the first value, it checks that the number of philosophers is minor 
- * than MAXPHILO / 2, minus 1: that's because each philosopher requires a
- * subthread as an internal clock, so the maximum number of philosophers
- * allowed must be half of the maximum number of threads allowed by the system,
- * minus the count of the auxiliary thread.
+ * After the first value, it checks that the number of philosophers is minor or
+ * equal than MAXPHILO. MAXPHILO is equal to (MAXTHREADS / 2) , [sometimes
+ * ((MAXTHREADS + 1) / 2)], because the program will use a number of threads
+ * that is twice the number of philosophers; those extra threads, as you can
+ * see more precisely at 'philo_start_simulation.c', will be used as life-clocks
+ * to manage the philosophers' death.
  * If an error occurs, it sets all the values into the array to 0.
  */
 
 void	philo_parse(int argc, char **argv, uint64_t *input)
 {
 	input[0] = philo_strcheck(argv[0]);
-	if (input[0] < (MAXPHILO / 2))
+	if (input[0] <= MAXPHILO)
 	{
 		input[1] = philo_strcheck(argv[1]);
 		input[2] = philo_strcheck(argv[2]);
