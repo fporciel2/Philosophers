@@ -94,6 +94,11 @@ Thursday 15 February 2024:
 - Updated the Wiki with explanations.
 - Written some macros and variables representing the main resources of the program.
 
+Friday 16 February 2024:
+
+- Added the initializer of the timers and written part of the timer's routine.
+- Fixed some bugs and inconsistencies.
+
 ## Contributing
 
 Contributions through forks are welcome.
