@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:24:22 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 10:58:36 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:17:44 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to start the
@@ -37,6 +37,85 @@
  */
 #include "philo.h"
 /*
+ * The function 'philo_destroy_mutexes' is nested into the file to destroy the
+ * mutexes initialized before a mutex initialization failure and in general all
+ * the mutexes allocated. It takes 'table', 'forks' and 'i' as parameters:
+ * 'table' and 'forks' are the mutexes to destroy, 'i' is the number of mutexes
+ * to destroy into the array whose beggining is pointed by 'forks'.
+ */
+
+static int	philo_destroy_mutexes(pthread_mutex_t *table,
+		pthread_mutex_t *forks, uint64_t i)
+{
+	int			error_status;
+	uint64_t	count;
+
+	if (i == 0)
+		return (0);
+	error_status = pthread_mutex_destroy(table);
+	count = 0;
+	while (count < i)
+		error_status = pthread_mutex_destroy(&forks[count++]);
+	return (error_status);
+}
+/*
+ * Function 'philo_detach_threads' and 'philo_join_threads' are nested into the
+ * file in order to, respectively, detach the timers if the thread creation
+ * fails, or join the timers if the thread creation has success.
+ * 'philo_join_threads' is also the end of the program.
+ */
+
+static int	philo_detach_threads(t_p *p, uint64_t i)
+{
+	int			error_status;
+	uint64_t	count;
+
+	if (i == 0)
+		return (philo_destroy_mutexes(&p->table, p->forks, p->input[0]));
+	count = 0;
+	while (count < i)
+		error_status = pthread_detach(p->timers[count++]);
+	error_status = pthread_mutex_unlock(&p->table);
+	return (philo_destroy_mutexes(&p->table, p->forks, p->input[0])
+			|| error_status);
+}
+
+static int	philo_join_threads(t_p *p)
+{
+	uint64_t	i;
+	int			error_status;
+
+	i = 0;
+	while (i < p->input[0])
+		error_status = pthread_join(p->timers[i++], NULL);
+	return (philo_destroy_mutexes(&p->table, p->forks, p->input[0])
+			|| error_status);
+}
+/*
+ * This function is meant to finish the boot of the simulation. After the
+ * initialization of mutexes, the timers are created and, if thread creation
+ * fails, detached. To do so, the 'table' is locked until all the timers are
+ * created: if that does not happen, the previously created timers are detached.
+ */
+
+static int	philo_create_timers(t_p *p)
+{
+	uint64_t	i;
+
+	i = 0;
+	if (pthread_mutex_lock(&p->table) != 0)
+		return (philo_destroy_mutexes(&p->table, p->forks, p->input[0]));
+	while (i < p->input[0])
+	{
+		if (pthread_create(&p->timers[i], NULL, philo_timer, p) != 0)
+			return (philo_detach_threads(p, i));
+		i++;
+	}
+	if (pthread_mutex_unlock(&p->table) != 0)
+		return (philo_destroy_threads(p, p->input[0]));
+	return (philo_join_threads(p));
+}
+/*
  * The general purpose of 'philo_start_simulation' is to start the simulation.
  * To do so, two parameters are given: 'timers', which is a pointer to the
  * beginning of an array of threads that will be used to simulate the life cycle
@@ -54,37 +133,23 @@
  * to the fork is delegated to the mutual exclusive synchronization, there is no
  * need to simulate the access to resource by creating physical resources.
  * 'table' is created to lock and unlock the standard output.
- * The function 'philo_destroy_mutexes' is nested into the file to destroy the
- * mutexes initialized before a mutex initialization failure and in general all
- * the mutexes allocated. It takes 'table', 'forks' and 'i' as parameters:
- * 'table' and 'forks' are the mutexes to destroy, 'i' is the number of mutexes
- * to destroy into the array whose beggining is pointed by 'forks'.
  */
-static int	philo_destroy_mutexes(pthread_mutex_t *table, pthread_mutex_t *forks,
-		uint64_t i)
-{
-	int			error_status;
-	uint64_t	count;
-
-	error_status = pthread_mutex_destroy(table);
-	count = 0;
-	while (count < i)
-		error_status = pthread_mutex_destroy(&forks[count++]);
-	return (error_status);
-}
 
 int	philo_start_simulation(pthread_t *timers, uint64_t *input)
 {
-	static pthread_mutex_t	table;
-	static pthread_mutex_t	forks[MAXPHILO];
-	uint64_t				i;
+	static t_p	p;
+	uint64_t	i;
 
-	if (pthread_mutex_init(&table, NULL) != 0)
+	if (pthread_mutex_init(&p.table, NULL) != 0)
 		return ((int)write(2, "An error has occurred.\n", 23) >= 0);
 	i = 0;
 	while (i < input[0])
 	{
-		if (pthread_mutex_init(&forks[i], NULL) != 0)
-			return (philo_destroy_mutexes(&table, forks, i));
+		if (pthread_mutex_init(&p.forks[i], NULL) != 0)
+			return (philo_destroy_mutexes(&p.table, p.forks, i));
+		i++;
 	}
+	p.timers = timers;
+	p.input = input;
+	return (philo_create_timers(&p));
 }

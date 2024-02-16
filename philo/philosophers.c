@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 13:29:50 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 09:56:16 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 11:44:05 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This program is part of the Philosophers project. Its purpose is to simulate
@@ -66,7 +66,7 @@
 int	main(int argc, char **argv)
 {
 	static uint64_t		input[5];
-	static pthread_t	timers[PHI_TIMERS];
+	static pthread_t	timers[MAXPHILO];
 
 	argc--;
 	if (argc < 4 || argc > 5)

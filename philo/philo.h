@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 10:13:38 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 11:51:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -82,7 +82,19 @@
 # ifndef PHI_TIMERS
 #  define PHI_TIMERS MAXPHILO
 # endif
+/*
+ * The following structure is needed by the 'philo_start_simulation' function
+ * and by the threads to manage the data.
+ */
 
+typedef struct s_p
+{
+	uint64_t		*input;
+	pthread_t		*timers;
+	pthread_t		philosophers[MAXPHILO];
+	pthread_mutex_t	forks[MAXPHILO];
+	pthread_mutex_t	table;
+}					t_p;
 
 /*
  * Here are the functions used in the program that need to be included using
