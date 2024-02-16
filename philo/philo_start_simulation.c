@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:24:22 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 12:17:44 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:05:23 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to start the
@@ -71,13 +71,13 @@ static int	philo_detach_threads(t_p *p, uint64_t i)
 	uint64_t	count;
 
 	if (i == 0)
-		return (philo_destroy_mutexes(&p->table, p->forks, p->input[0]));
+		return (philo_destroy_mutexes(p->table, p->forks, p->input[0]));
 	count = 0;
 	while (count < i)
 		error_status = pthread_detach(p->timers[count++]);
 	error_status = pthread_mutex_unlock(&p->table);
-	return (philo_destroy_mutexes(&p->table, p->forks, p->input[0])
-			|| error_status);
+	return (philo_destroy_mutexes(p->table, p->forks, p->input[0])
+		|| error_status);
 }
 
 static int	philo_join_threads(t_p *p)
@@ -88,8 +88,8 @@ static int	philo_join_threads(t_p *p)
 	i = 0;
 	while (i < p->input[0])
 		error_status = pthread_join(p->timers[i++], NULL);
-	return (philo_destroy_mutexes(&p->table, p->forks, p->input[0])
-			|| error_status);
+	return (philo_destroy_mutexes(p->table, p->forks, p->input[0])
+		|| error_status);
 }
 /*
  * This function is meant to finish the boot of the simulation. After the
@@ -103,15 +103,16 @@ static int	philo_create_timers(t_p *p)
 	uint64_t	i;
 
 	i = 0;
-	if (pthread_mutex_lock(&p->table) != 0)
-		return (philo_destroy_mutexes(&p->table, p->forks, p->input[0]));
+	if (pthread_mutex_lock(p->table) != 0)
+		return (philo_destroy_mutexes(p->table, p->forks, p->input[0]));
 	while (i < p->input[0])
 	{
-		if (pthread_create(&p->timers[i], NULL, philo_timer, p) != 0)
+		p->i = i;
+		if (pthread_create(&p->timers[i], NULL, philo_timer, (void *)p) != 0)
 			return (philo_detach_threads(p, i));
 		i++;
 	}
-	if (pthread_mutex_unlock(&p->table) != 0)
+	if (pthread_mutex_unlock(p->table) != 0)
 		return (philo_destroy_threads(p, p->input[0]));
 	return (philo_join_threads(p));
 }
@@ -137,16 +138,22 @@ static int	philo_create_timers(t_p *p)
 
 int	philo_start_simulation(pthread_t *timers, uint64_t *input)
 {
-	static t_p	p;
-	uint64_t	i;
+	static t_p				p;
+	uint64_t				i;
+	static pthread_t		philosophers[MAXPHILO];
+	static pthread_mutex_t	forks[MAXPHILO];
+	static pthread_mutex_t	table;
 
-	if (pthread_mutex_init(&p.table, NULL) != 0)
+	p.table = &table;
+	p.forks = forks;
+	p.philosophers = philosophers;
+	if (pthread_mutex_init(p.table, NULL) != 0)
 		return ((int)write(2, "An error has occurred.\n", 23) >= 0);
 	i = 0;
 	while (i < input[0])
 	{
 		if (pthread_mutex_init(&p.forks[i], NULL) != 0)
-			return (philo_destroy_mutexes(&p.table, p.forks, i));
+			return (philo_destroy_mutexes(p.table, p.forks, i));
 		i++;
 	}
 	p.timers = timers;

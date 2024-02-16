@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 11:51:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/16 16:01:25 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -41,8 +41,6 @@
 
 #ifndef PHILO_H
 # define PHILO_H
-
-# define _DEFAULT_SOURCE
 /*
  * Here are the included headers.
  *
@@ -66,22 +64,19 @@
  * Here, we will establish a default value in case of errors.
  */
 
-# ifndef MAXTHREADS
-#  define MAXTHREADS 400
-# endif
 # ifndef MAXPHILO
-#  if MAXTHREADS % 2 == 0
-#   define MAXPHILO (MAXTHREADS / 2)
-#  else
-#   define MAXPHILO ((MAXTHREADS + 1) / 2)
+#  define MAXPHILO 400
 # endif
 /*
- * The other macro, PHI_TIMERS, is defined by the preprocessor to define the
- * maximum usable number of threads for any structure that stores thread, plus 1
+ * The following definitions are the messages to display representing the
+ * philosopher's status.
  */
-# ifndef PHI_TIMERS
-#  define PHI_TIMERS MAXPHILO
-# endif
+
+# define THINKING "is thinking"
+# define EATING "is eating"
+# define SLEEPING "is sleeping"
+# define FORK "has taken a fork"
+# define DEAD "is dead"
 /*
  * The following structure is needed by the 'philo_start_simulation' function
  * and by the threads to manage the data.
@@ -91,21 +86,55 @@ typedef struct s_p
 {
 	uint64_t		*input;
 	pthread_t		*timers;
-	pthread_t		philosophers[MAXPHILO];
-	pthread_mutex_t	forks[MAXPHILO];
-	pthread_mutex_t	table;
+	pthread_t		*philosophers;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	*table;
+	uint64_t		i;
 }					t_p;
+/*
+ * The following structure is needed by the 'philo_timer' routine in order to
+ * pass the correct values to the philosophers.
+ */
 
+typedef struct s_t
+{
+	uint64_t		id;
+	uint64_t		*start_time;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*table;
+	int				*iseating;
+	int				lonely;
+	uint64_t		ttd;
+	uint64_t		tte;
+	uint64_t		tts;
+	uint64_t		nte;
+}
 /*
  * Here are the functions used in the program that need to be included using
  * this header.
+ * 1.
  * The first function is 'philo_parse', from the 'philo_input_check.c' file: it
  * provides the parsing of the input arguments and their conversion into an
  * array of integers using the 'uint64_t' type.
+ * 2.
  * The second function is 'philo_start_simulation', that initializes the threads
  * and the mutexes and starts the threads.
+ * 3.
+ * The third function is 'philo_log', that prints that displays the
+ * philosopher's status.
+ * 4.
+ * The fourth function, 'philo_timer', is the routine executed by the threads
+ * representing the timers.
+ * 5.
+ * The fifth function, 'get_time', is used to get the current timestamp in
+ * milliseconds.
  */
-void	philo_parse(int argc, char **argv, uint64_t *input);
-int		philo_start_simulation(pthread_t *timers, uint64_t *input)
+
+void		philo_parse(int argc, char **argv, uint64_t *input);
+int			philo_start_simulation(pthread_t *timers, uint64_t *input);
+int			philo_log(uint64_t tmstmp, uint64_t id, char *status);
+void		*philo_timer(void *p);
+uint64_t	philo_get_time(void);
 
 #endif
