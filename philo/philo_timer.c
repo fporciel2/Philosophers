@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 13:21:59 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 16:06:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/17 17:30:29 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It contains the routine of the
@@ -30,104 +30,113 @@
  * please see:
  * https://github.com/fporciel2
  */
-/* Header inclusion. */
+/*
+ * The concept of the timer's routine is about the construction of a basic
+ * logical clock for processes. While in this specific implementation it doesn't
+ * work as a fully-implemented logical clock, it is a good starting point. A
+ * full logical clock should establish the happen-before (or happen-after)
+ * relation between events occurring in processes. There are two limitations to
+ * that purpose: philosophers can't communicate, so the threads can't share
+ * memory and so events can't be logged to modify the behavior of other
+ * processes. While this limitation is not too big, it involves a change of
+ * concept. In order to implement a logical clock without communication between
+ * processes, it is important to work in two phases: in a first phase, the Make
+ * tool should check the system's situation. In a second phase, the compiler
+ * should produce a system-dependent code path that allows to infer the
+ * determinant of a state of degradation in the communication between events
+ * starting from the self-detection, by a process, of the temporal variations in
+ * its execution with respect to a pre-established temporal order, and adapt
+ * accordingly. This require a metaprogramming approach and a theory of
+ * communication between events that excludes communication between processes.
+ * It can be done by retrieving Leibniz's theory of time, but I will not do it
+ * now because the newtonian simulation of time is imprisoning my mind and I
+ * feel like I have no time to do so. We will see that later.
+ * Right now, the only thing to build is a timer that lays the foundation for
+ * that kind of clock: it will check for the death of the philosopher,
+ * establishing a basic timing for the child thread.
+ * Another thing not done is proper error handling. Since this is a preliminary
+ * phase of the project, I will not implement it. However, it is important to
+ * note that this program is not ready-to-use. It can only show a limited range
+ * of synchronization situations working well.
+ */
+/* Header inclusion. See 'philo.h' for more details about the structures used
+ * int this file.*/
 
 #include "philo.h"
 /*
- * The 'philo_timer_odd' function is used to create the odd philosophers. Its
- * purpose is to assign the 'right_fork' and the 'left_fork' before starting the
- * thread.
- * In this case, the right fork is the fork corresponding to the philosopher
- * being created, and the left fork is the one of the next philosopher. If the
- * thread creation fails, the thread attempts to kill itself by calling the
- * 'philo_selfjoin' function.
+ * The 'philo_timer_clock' function simulates a clock that constantly checks the
+ * current timestamp against the time of the last meal.
+ */
+/*
+ * The 'philo_timer_init' function performs the creation of the philosophers. It
+ * uses the variant of the resource hierarchy algorithm mentioned below in the
+ * the description of the 'philo_timer' function as a criterion to choose
+ * whether start the thread using the 'philo_routine_even' or the
+ * 'philo_routine_odd' function. It also creates the 'time' mutex and retrieves
+ * the pointer to the 'table' mutex in order to interact with the standard
+ * output and the philosopher without interfering with their critical sections.
+ * The 'phi' structure is initialized for readability and mutual exclusion
+ * purposes.
  */
 
-static void	*philo_timer_odd(t_t *t, t_p *p)
+static void	*philo_timer_init(t_t *t, pthread_t *philosopher)
 {
-	pthread_mutex_lock(&p->forks[p->i]);
-	pthread_mutex_lock(&p->forks[p->i + 1]);
-	t->left_fork = &p->forks[p->i];
-	t->right_fork = &p->forks[p->i + 1];
-	pthread_mutex_unlock(&p->forks[p->i]);
-	pthread_mutex_unlock(&p->forks[p->i + 1]);
-	if (p->input[4] != 0)
-	{
-		if (pthread_create(philosophers[p->i], NULL, philo_odd_routine_nte,
-			(void *)t) != 0)
-			return (philo_selfjoin(t, p));
-	}
+	pthread_mutex_t	*table;
+	pthread_mutex_t	time;
+
+	table = t->table;
+	pthread_mutex_init(&time, NULL);
+	t->time = &time;
+	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
+		&& (t.id == p->input[0])))
+		pthread_create(philosopher, NULL, philo_routine_even, (void *)t);
 	else
-	{
-		if (pthread_create(philosophers[p->i], NULL, philo_odd_routine_no_nte,
-			(void *)t) != 0)
-			return (philo_selfjoin(t, p));
-	}
-	return (philo_timer_clock(t, p));
+		pthread_create(philosopher, NULL, philo_routine_odd, (void *)t);
+	return (philo_timer_clock(t, philosopher, table, &time));
 }
 /*
- * The 'philo_timer_even' function is used to create the even philosophers. Its
- * purpose is to assign the 'right_fork' and the 'left_fork' before starting the
- * thread.
- * In this case, the right fork is the fork corresponding to the philosopher
- * with the previous ID. If the thread creation fails, the thread attempts to
- * kill itself by calling the 'philo_selfjoin' function.
+ * Due to the complexity of the timer's routine, a mutual-exclusive use of
+ * resources is needed. To do so, the 'philo_timer' function takes a set of
+ * pointers from the structure 'p', that is shared with the main process and
+ * with other timers. To do so, it before locks the table: so, its execution
+ * starts after the creation of all the other timers.
+ * It also uses the 't' data type to perform an analogue communication with its
+ * philosopher. After the exchange of addresses, there is no need to maintain a
+ * reference to the 'phi' structure.
+ * A note about the assignment of the forks. The basic way to synchronize the
+ * philosophers is to apply a strict mutual exclusion through a variant of the
+ * resource hierarchy algorithm, so that for any couple of philosophers the one
+ * with odd id takes its fork before and then the fork of its companion, and the
+ * even one does the opposite. With odd philosophers on the table, the last
+ * philosopher has not a companion, so it must take the fork from the last even
+ * philosopher.
  */
 
-static void	*philo_timer_even(t_t *t, t_p *p)
-{
-	pthread_mutex_lock(&p->forks[p->i - 1]);
-	pthread_mutex_lock(&p->forks[p->i]);
-	t->left_fork = &p->forks[p->i - 1];
-	t->right_fork = &p->forks[p->i];
-	pthread_mutex_unlock(&p->forks[p->i]);
-	pthread_mutex_unlock(&p->forks[p->i - 1]);
-	if (p->input[4] != 0)
-	{
-		if (pthread_create(philosophers[p->i], NULL, philo_even_routine_nte,
-			(void *)t) != 0)
-			return (philo_selfjoin(t, p));
-	}
-	else
-	{
-		if (pthread_create(philosophers[p->i], NULL, philo_even_routine_no_nte,
-			(void *)t) != 0)
-			return (philo_selfjoin(t, p));
-	}
-	return (philo_timer_clock(t, p));
-}
-/*
- * This is the main function of the timer's routine, 'philo_timer'. It starts by
- * locking the main mutex to ensure that the creation of other timers is going
- * well. After locking the mutex, it starts initializing the structure for the
- * philosopher. It assigns a different 'right_fork' and 'left_fork' depending on
- * the value of the 'id' of the philosopher: to do so, it splits its execution
- * accordingly.
- */
-
-void	*philo_timer(void *philo)
+void	*philo_timer(void *phi)
 {
 	t_p			*p;
-	t_t			t;
-	uint64_t	start_time;
+	pthread_t	*philosopher;
+	static t_t	t;
 
-	pthread_mutex_lock(p->table);
-	p = (t_p *)philo;
-	t.id = p->i + 1;
-	t.start_time = &start_time;
+	pthread_mutex_lock((t_p *)phi->table);
+	p = (t_p *)phi;
 	t.table = p->table;
-	pthread_mutex_unlock(p->table);
+	t.id = p->i + 1;
+	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
+		&& (t.id == p->input[0])))
+		t.left_fork = p->forks[p->i - 1];
+	else
+		t.left_fork = p->forks[p->i];
+	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
+		&& (t.id == p->input[0])))
+		t.right_fork = p->forks[p->i];
+	else
+		t.right_fork = p->forks[p->i - 1];
 	t.ttd = p->input[1];
 	t.tte = p->input[2];
 	t.tts = p->input[3];
 	t.nte = p->input[4];
-	if (t.id != p->inpu[0])
-	{
-		if ((t.id % 2) == 0)
-			return (philo_timer_even(&t, p));
-		else
-			return (philo_timer_odd(&t, p));
-	}
-	else
-		return (philo_timer_even(&t, p));
+	philosopher = &p->philosophers[p->i];
+	pthread_mutex_unlock((t_p *)phi->table);
+	return (philo_timer_init(&t, philosopher));
 }

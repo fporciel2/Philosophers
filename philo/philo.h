@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 16:01:25 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/17 17:29:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -78,38 +78,78 @@
 # define FORK "has taken a fork"
 # define DEAD "is dead"
 /*
- * The following structure is needed by the 'philo_start_simulation' function
- * and by the threads to manage the data.
+ * The 't_p' structure data type is used only for readability. It is meant to
+ * share the resources with timers by the 'philo_start_simulation' function,
+ * using a pointer to this structure type. Then, each timer will have its own
+ * automatic variables taken from this structure, so that the access to a
+ * resource done by the timer doesn't conflict with the access to other
+ * resources pointed by this structure.
  */
 
 typedef struct s_p
 {
-	uint64_t		*input;
-	pthread_t		*timers;
-	pthread_t		*philosophers;
-	pthread_mutex_t	*forks;
 	pthread_mutex_t	*table;
+	pthread_mutex_t	*forks;
+	pthread_t		*philosophers;
+	pthread_t		*timers;
+	uint64_t		*input;
 	uint64_t		i;
 }					t_p;
 /*
- * The following structure is needed by the 'philo_timer' routine in order to
- * pass the correct values to the philosophers.
+ * The 't_t' data type is used in part for readability and in part to share
+ * informations between the timer and the philosopher. It takes values and
+ * pointers using a logic similar to the 't_p' structure. However, in this case
+ * the concept is to give to the philosopher a set of isolated variables to not
+ * share with other philosophers or other threads, apart from specific
+ * informations needed by the timer to kill the philosopher. I never thought
+ * philosophy would be so deadly.
+ * 'table' is used to lock the standard output.
+ * 'left_fork' and 'right_fork' are used to lock the forks.
+ * 'id' is the id of the philosopher.
+ * 'start_time' is the timestamp at the start of the simulation and it is
+ * updated at every meal.
+ * 'ttd' is the time to die.
+ * 'tte' is the time to eat.
+ * 'tts' is the time to sleep.
+ * 'iseating' is used by the timer to know if the philosopher is eating or not
+ * and it is updated at every meal: set to 1 before logging the time to eat and
+ * starting the meal, set to 0 at the end of the meal, before updating the
+ * 'start_time' variable.
+ * 'nte' is the number of times each philosopher must eat.
+ * 'time' is the mutex used to lock 'start_time' and 'iseating' to communicate
+ * with the timer.
  */
 
 typedef struct s_t
 {
-	uint64_t		id;
-	uint64_t		*start_time;
-	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*table;
-	int				*iseating;
-	int				lonely;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*time;
+	uint64_t		id;
+	uint64_t		start_time;
 	uint64_t		ttd;
 	uint64_t		tte;
 	uint64_t		tts;
 	uint64_t		nte;
-}
+	int				iseating;
+}					t_t;
+/*
+ * The 't_phi' data type is used for readability as a structure to store
+ * informations used by the timer to analyze the correct order of time and
+ * eating. This is done so that the philosopher can act without interferences in
+ * its critical section while the timer is checking the order of time and
+ * torturing the philosopher. See the 'philo_timer_clock' and 'philo_timer_init'
+ * functions in the 'philo_timer.c' file for more details.
+ */
+
+typedef struct s_phi
+{
+	pthread_mutex_t	*table;
+	pthread_mutex_t	*time;
+	uint64_t		id;
+	uint64_t		time_to_die;
+}					t_phi;
 /*
  * Here are the functions used in the program that need to be included using
  * this header.
