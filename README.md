@@ -99,6 +99,10 @@ Friday 16 February 2024:
 - Added the initializer of the timers and written part of the timer's routine.
 - Fixed some bugs and inconsistencies.
 
+Saturday 17 February 2024:
+
+- Reviewed the code paths of the timer's routine.
+
 ## Contributing
 
 Contributions through forks are welcome.
