@@ -103,6 +103,10 @@ Saturday 17 February 2024:
 
 - Reviewed the code paths of the timer's routine.
 
+Sunday 18 February 2024:
+
+- Completed the timer.
+
 ## Contributing
 
 Contributions through forks are welcome.
