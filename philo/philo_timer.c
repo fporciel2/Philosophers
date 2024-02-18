@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 13:21:59 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/17 17:30:29 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/18 15:27:54 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It contains the routine of the
@@ -64,9 +64,76 @@
 
 #include "philo.h"
 /*
+ * The 'philo_timer_kill' function must cause the end of the dinner,
+ * so all the resources must be released.
+ * After that, the function checks whether it is killing the philosopher because
+ * it is dead, or because the dinner is finished. To do so, it checks the value
+ * of 'param' and if it is equal to 1, it logs the death of the philosopher.
+ * In any case, it waits for '(time_to_die * 40) - 40' milliseconds before
+ * detaching the philosopher. Since the 'usleep' function takes its arguments in
+ * microseconds and the time to die is expressed in milliseconds, the value must
+ * multiplied by 1000 to obtain the number of microseconds: however, 'usleep'
+ * also has a maximum limit of 1000000 microseconds, so it is necessary to check
+ * that the value is not greater than 1000000. However, in this implementation I
+ * will not do it, because this is not the final version of the program and this
+ * file simply shows the use of the 'usleep' function for small amounts of time.
+ */
+
+static void	*philo_timer_kill(pthread_t *philosopher, t_phi *phi, int param)
+{
+	useconds_t	time_to_kill;
+
+	pthread_mutex_lock(phi->table);
+	if (param == 1)
+		param = philo_log(philo_get_time(), phi->id, DEAD);
+	time_to_kill = (useconds_t)(phi->time_to_die * 1000);
+	usleep(time_to_kill);
+	usleep(time_to_kill);
+	usleep(time_to_kill);
+	usleep(time_to_kill - 40);
+	pthread_detach(philosopher);
+	pthread_mutex_unlock(phi->time);
+	pthread_mutex_destroy(phi->time);
+	pthread_mutex_unlock(phi->table);
+	return (NULL);
+}
+/*
  * The 'philo_timer_clock' function simulates a clock that constantly checks the
  * current timestamp against the time of the last meal.
+ * The 'start_time' variable, that represents the beginning of the simulation in
+ * terms of timestamp, or the timestamp of the last meal, is compared against
+ * the current timestamp: if the difference between the current timestamp and
+ * 'start_time' is greater or equal than 'time_to_die - 10', that represents the
+ * final moment for the philosopher to live, it is then compared against the
+ * '(time_to_die * 40) - 40' value, that represents the time of waiting before
+ * killing the philosopher; if this comparison establishes that the difference
+ * is greater than the killing time, then the philosopher is detached:
+ * otherwise, the 'iseating' value is checked and, if it is equal to 0, the
+ * killing process starts through the 'philo_timer_kill' function.
  */
+
+static void	*philo_timer_clock(pthread_t *philosopher, t_phi *phi)
+{
+	pthread_mutex_lock(phi->time);
+	phi->start_time = philo_get_time();
+	pthread_mutex_unlock(phi->time);
+	while (1)
+	{
+		pthread_mutex_lock(phi->time);
+		if (phi->end == 1)
+			return (NULL);
+		if ((philo_get_time() - phi->start_time) >= (phi->time_to_die - 10))
+		{
+			if ((philo_get_time() - phi->start_time) >= ((phi->time_to_die * 40)
+					- 40))
+				return (philo_timer_kill(philosopher, phi, 0));
+			else if (phi->iseating == 0)
+				return (philo_timer_kill(philosopher, phi, 1));
+		}
+		pthread_mutex_unlock(phi->time);
+	}
+	return (NULL);
+}
 /*
  * The 'philo_timer_init' function performs the creation of the philosophers. It
  * uses the variant of the resource hierarchy algorithm mentioned below in the
@@ -76,23 +143,31 @@
  * the pointer to the 'table' mutex in order to interact with the standard
  * output and the philosopher without interfering with their critical sections.
  * The 'phi' structure is initialized for readability and mutual exclusion
- * purposes.
+ * purposes. It is used to pass to the clock the variables that must be
+ * constantly checked: passing them to the philosopher would cause constant
+ * access to a shared critical section.
  */
 
 static void	*philo_timer_init(t_t *t, pthread_t *philosopher)
 {
-	pthread_mutex_t	*table;
+	static t_phi	phi;
 	pthread_mutex_t	time;
 
-	table = t->table;
+	phi.table = t->table;
 	pthread_mutex_init(&time, NULL);
 	t->time = &time;
+	phi.time = &time;
+	phi.id = t->id;
+	phi.time_to_die = t->ttd;
+	t->start_time = &phi.start_time;
+	t->iseating = &phi.iseating;
+	t->end = &phi.end;
 	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
 		&& (t.id == p->input[0])))
 		pthread_create(philosopher, NULL, philo_routine_even, (void *)t);
 	else
 		pthread_create(philosopher, NULL, philo_routine_odd, (void *)t);
-	return (philo_timer_clock(t, philosopher, table, &time));
+	return (philo_timer_clock(philosopher, &phi));
 }
 /*
  * Due to the complexity of the timer's routine, a mutual-exclusive use of
