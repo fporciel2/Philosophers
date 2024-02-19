@@ -65,6 +65,8 @@ deadlocks and starvation, parallels concepts of synchronization and temporal coo
 
 ## Project Status
 
+**General Status**: The program is at an early stage of development.
+
 Friday 9 February 2024:
 
 - The Wiki has now a home page, a license section and part of an introduction about main topics.
@@ -106,6 +108,10 @@ Saturday 17 February 2024:
 Sunday 18 February 2024:
 
 - Completed the timer.
+
+Monday 19 February 2024:
+
+- Concept development completed: started a preliminar debugging phase.
 
 ## Contributing
 
