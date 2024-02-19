@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 16:48:31 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/18 15:10:00 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/19 09:33:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This is the header file for the Philosophers project.
@@ -176,6 +176,8 @@ typedef struct s_phi
  * 5.
  * The fifth function, 'get_time', is used to get the current timestamp in
  * milliseconds.
+ * 6.
+ * Finally, the 'philo_routine' function executes the philosopher's dinner.
  */
 
 void		philo_parse(int argc, char **argv, uint64_t *input);
@@ -183,5 +185,6 @@ int			philo_start_simulation(pthread_t *timers, uint64_t *input);
 int			philo_log(uint64_t tmstmp, uint64_t id, char *status);
 void		*philo_timer(void *p);
 uint64_t	philo_get_time(void);
+void		*philo_routine(void *t);
 
 #endif

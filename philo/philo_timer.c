@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 13:21:59 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/18 15:27:54 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/19 10:24:33 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It contains the routine of the
@@ -109,7 +109,10 @@ static void	*philo_timer_kill(pthread_t *philosopher, t_phi *phi, int param)
  * killing the philosopher; if this comparison establishes that the difference
  * is greater than the killing time, then the philosopher is detached:
  * otherwise, the 'iseating' value is checked and, if it is equal to 0, the
- * killing process starts through the 'philo_timer_kill' function.
+ * killing process starts through the 'philo_timer_kill' function. Since it is
+ * possible to for the philosopher to end its routine autonomously, this
+ * circumstance is handled using the 'pthread_join' function under the condition
+ * of a 'end' value equal to 1.
  */
 
 static void	*philo_timer_clock(pthread_t *philosopher, t_phi *phi)
@@ -121,7 +124,7 @@ static void	*philo_timer_clock(pthread_t *philosopher, t_phi *phi)
 	{
 		pthread_mutex_lock(phi->time);
 		if (phi->end == 1)
-			return (NULL);
+			break ;
 		if ((philo_get_time() - phi->start_time) >= (phi->time_to_die - 10))
 		{
 			if ((philo_get_time() - phi->start_time) >= ((phi->time_to_die * 40)
@@ -132,14 +135,16 @@ static void	*philo_timer_clock(pthread_t *philosopher, t_phi *phi)
 		}
 		pthread_mutex_unlock(phi->time);
 	}
+	pthread_mutex_unlock(phi->time);
+	pthread_join(*philosopher, NULL);
 	return (NULL);
 }
 /*
  * The 'philo_timer_init' function performs the creation of the philosophers. It
  * uses the variant of the resource hierarchy algorithm mentioned below in the
  * the description of the 'philo_timer' function as a criterion to choose
- * whether start the thread using the 'philo_routine_even' or the
- * 'philo_routine_odd' function. It also creates the 'time' mutex and retrieves
+ * whether start the thread using the 'philo_routine' function.
+ * It also creates the 'time' mutex and retrieves
  * the pointer to the 'table' mutex in order to interact with the standard
  * output and the philosopher without interfering with their critical sections.
  * The 'phi' structure is initialized for readability and mutual exclusion
@@ -162,11 +167,8 @@ static void	*philo_timer_init(t_t *t, pthread_t *philosopher)
 	t->start_time = &phi.start_time;
 	t->iseating = &phi.iseating;
 	t->end = &phi.end;
-	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
-		&& (t.id == p->input[0])))
-		pthread_create(philosopher, NULL, philo_routine_even, (void *)t);
-	else
-		pthread_create(philosopher, NULL, philo_routine_odd, (void *)t);
+	pthread_create(philosopher, NULL, philo_routine, (void *)t);
+	pthread_mutex_unlock((t_p *)phi->table);
 	return (philo_timer_clock(philosopher, &phi));
 }
 /*
@@ -212,6 +214,5 @@ void	*philo_timer(void *phi)
 	t.tts = p->input[3];
 	t.nte = p->input[4];
 	philosopher = &p->philosophers[p->i];
-	pthread_mutex_unlock((t_p *)phi->table);
 	return (philo_timer_init(&t, philosopher));
 }
