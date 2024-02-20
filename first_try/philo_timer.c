@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 13:21:59 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/19 10:24:33 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/20 13:06:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. It contains the routine of the
@@ -91,7 +91,7 @@ static void	*philo_timer_kill(pthread_t *philosopher, t_phi *phi, int param)
 	usleep(time_to_kill);
 	usleep(time_to_kill);
 	usleep(time_to_kill - 40);
-	pthread_detach(philosopher);
+	pthread_detach(*philosopher);
 	pthread_mutex_unlock(phi->time);
 	pthread_mutex_destroy(phi->time);
 	pthread_mutex_unlock(phi->table);
@@ -155,7 +155,7 @@ static void	*philo_timer_clock(pthread_t *philosopher, t_phi *phi)
 
 static void	*philo_timer_init(t_t *t, pthread_t *philosopher)
 {
-	static t_phi	phi;
+	t_phi			phi;
 	pthread_mutex_t	time;
 
 	phi.table = t->table;
@@ -168,7 +168,7 @@ static void	*philo_timer_init(t_t *t, pthread_t *philosopher)
 	t->iseating = &phi.iseating;
 	t->end = &phi.end;
 	pthread_create(philosopher, NULL, philo_routine, (void *)t);
-	pthread_mutex_unlock((t_p *)phi->table);
+	pthread_mutex_unlock(phi.table);
 	return (philo_timer_clock(philosopher, &phi));
 }
 /*
@@ -193,22 +193,22 @@ void	*philo_timer(void *phi)
 {
 	t_p			*p;
 	pthread_t	*philosopher;
-	static t_t	t;
+	t_t			t;
 
-	pthread_mutex_lock((t_p *)phi->table);
+	pthread_mutex_lock(((t_p *)phi)->table);
 	p = (t_p *)phi;
 	t.table = p->table;
 	t.id = p->i + 1;
 	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
 		&& (t.id == p->input[0])))
-		t.left_fork = p->forks[p->i - 1];
+		t.left_fork = &p->forks[p->i - 1];
 	else
-		t.left_fork = p->forks[p->i];
+		t.left_fork = &p->forks[p->i];
 	if (((t.id % 2) == 0) || (((p->input[0] % 2) != 0)
 		&& (t.id == p->input[0])))
-		t.right_fork = p->forks[p->i];
+		t.right_fork = &p->forks[p->i];
 	else
-		t.right_fork = p->forks[p->i - 1];
+		t.right_fork = &p->forks[p->i - 1];
 	t.ttd = p->input[1];
 	t.tte = p->input[2];
 	t.tts = p->input[3];

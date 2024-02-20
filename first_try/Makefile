@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/10 17:11:21 by fporciel          #+#    #+#              #
-#    Updated: 2024/02/16 12:51:33 by fporciel         ###   ########.fr        #
+#    Updated: 2024/02/20 12:56:27 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # This is the Makefile used to compile the Philosophers program.
@@ -73,7 +73,7 @@ OBJS := $(patsubst %.c, %.o, $(SRCS))
 # default source. Please note that the standard applied is C11 due to the need
 # to use 'usleep', that is not allowed by C17. 
 CC := gcc
-CFLAGS := -std=c11 -pedantic-errors -Wall -Wextra -Werror -O3 -march=native -g
+CFLAGS := -pedantic-errors -Wall -Wextra -Werror -O3 -march=native -g
 OPT := $(MAXPHILOS) $(INCLUDE) $(HEADER)
 LDFLAGS := -lc -lpthread
 # For readability, I will merge the variables.
@@ -87,6 +87,16 @@ $(NAME): $(OBJS)
 # Then, the 'all' rule simply executes the default goal.
 all: $(NAME)
 
+asan: $(SRCS)
+	$(CC) -fsanitize=address $(CFLAGS) $(OPT) -c $^
+	$(CC) -fsanitize=address $(CFLAGS) $(OPT) philosophers.c $(OBJS) $(LDFLAGS) \
+		-lasan -o $(NAME)
+
+tsan: $(SRCS)
+	$(CC) -fsanitize=thread $(CFLAGS) $(OPT) -c $^
+	$(CC) -fsanitize=thread $(CFLAGS) $(OPT) philosophers.c $(OBJS) $(LDFLAGS) \
+		-ltsan -o $(NAME)
+
 # The objects are created using a rule that explicitly names the source files.
 $(OBJS): $(SRCS)
 	$(CC) $(CFLAGS) $(OPT) -c $^
@@ -94,6 +104,7 @@ $(OBJS): $(SRCS)
 # The 'clean' rule removes only the object files.
 clean:
 	rm -f $(OBJS)
+	rm -f philo.h.gch
 
 # The 'fclean' rule removes the executable file and requires that object files
 # are already removed.
@@ -102,5 +113,5 @@ fclean: clean
 
 # Finally, the 're' rule executes the default goal after cleaning both the
 # object files and the executable file.
-re: clean fclean
+re: clean fclean all
 

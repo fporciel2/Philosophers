@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:24:22 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/16 16:05:23 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/20 12:26:27 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* This file is part of the Philosophers project. Its purpose is to start the
@@ -52,6 +52,7 @@ static int	philo_destroy_mutexes(pthread_mutex_t *table,
 
 	if (i == 0)
 		return (0);
+	error_status = 0;
 	error_status = pthread_mutex_destroy(table);
 	count = 0;
 	while (count < i)
@@ -72,10 +73,11 @@ static int	philo_detach_threads(t_p *p, uint64_t i)
 
 	if (i == 0)
 		return (philo_destroy_mutexes(p->table, p->forks, p->input[0]));
+	error_status = 0;
 	count = 0;
 	while (count < i)
 		error_status = pthread_detach(p->timers[count++]);
-	error_status = pthread_mutex_unlock(&p->table);
+	error_status = pthread_mutex_unlock(p->table);
 	return (philo_destroy_mutexes(p->table, p->forks, p->input[0])
 		|| error_status);
 }
@@ -86,6 +88,7 @@ static int	philo_join_threads(t_p *p)
 	int			error_status;
 
 	i = 0;
+	error_status = 0;
 	while (i < p->input[0])
 		error_status = pthread_join(p->timers[i++], NULL);
 	return (philo_destroy_mutexes(p->table, p->forks, p->input[0])
@@ -113,7 +116,7 @@ static int	philo_create_timers(t_p *p)
 		i++;
 	}
 	if (pthread_mutex_unlock(p->table) != 0)
-		return (philo_destroy_threads(p, p->input[0]));
+		return (philo_detach_threads(p, p->input[0]));
 	return (philo_join_threads(p));
 }
 /*
