@@ -113,6 +113,10 @@ Monday 19 February 2024:
 
 - Concept development completed: started a preliminar debugging phase.
 
+Tuesday 20 February 2024:
+
+- Restarted the entire project due to an issue determined by the use of data segment and static variables.
+
 ## Contributing
 
 Contributions through forks are welcome.
