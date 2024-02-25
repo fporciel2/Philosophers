@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:22:16 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/25 15:14:16 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/25 16:02:20 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -65,10 +65,12 @@ typedef struct s_philo
 
 typedef struct s_bowl
 {
-}	t_bowl;
+	int	test_value;
+}		t_bowl;
 
 typedef struct s_table
 {
+	uint64_t		test_value;
 	struct s_philo	*philosopher;
 	struct s_bowl	*spaghetti;
 	struct s_table	*table;
