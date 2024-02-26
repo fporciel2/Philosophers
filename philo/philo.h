@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 15:17:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:24:57 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -36,6 +36,24 @@
 
 #ifndef PHILO_H
 # define PHILO_H
-
+# define _DEFAULT_SOURCE
+# ifndef MAXPHILOS
+#  define MAXPHILOS 400
+# endif
+# define THINK "is thinking"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define FORK "has taken a fork"
+# define DEAD "is dead"
+# include <time.h>
+# include <sys/types.h>
+# include <stdint.h>
+# include <string.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <pthread.h>
 
 #endif
