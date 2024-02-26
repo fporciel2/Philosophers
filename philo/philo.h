@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:22:16 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/25 16:02:20 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:55:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -57,15 +57,23 @@
 # define FORK "has taken a fork"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
+# define DIED "died"
+# define TIME_TO_EAT 1
+# define TIME_TO_THINK 2
+# define TIME_TO_SLEEP 3
 
 typedef struct s_philo
 {
 	int	is;
+	int	is_eating;
+	int	is_thinking;
+	int	is_sleeping;
 }		t_philo;
 
 typedef struct s_bowl
 {
 	int	test_value;
+	int	*is_getting_eaten;
 }		t_bowl;
 
 typedef struct s_table
@@ -79,6 +87,7 @@ typedef struct s_table
 
 /* Procedure's prototypes. */
 t_table	*philo_sit_at_table(t_philo *philosophers);
+int		philo_eat_think_sleep(t_philo *philosophers, t_table *table, int time);
 /* Cleaning on failure prototypes. */
 /* Cleaning on success prototypes. */
 t_table	*philo_clean_table(t_table *table);

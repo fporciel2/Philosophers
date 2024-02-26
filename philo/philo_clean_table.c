@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 15:15:14 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/25 15:17:42 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 10:30:09 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* Philosophers is a simulation that implements a solution to the dining
@@ -40,7 +40,11 @@ t_table	*philo_clean_table(t_table *table)
 	if (table)
 	{
 		if (table->spaghetti)
+		{
+			if (table->spaghetti->is_getting_eaten)
+				free(table->spaghetti->is_getting_eaten);
 			free(table->spaghetti);
+		}
 		free(table);
 	}
 	return (NULL);

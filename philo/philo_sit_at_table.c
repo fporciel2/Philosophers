@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 13:29:54 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 09:41:35 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 11:18:34 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation that implements a solution to the dining
@@ -75,6 +75,27 @@ static t_table	*philo_create_table(t_table *table, uint64_t number)
 	return (table);
 }
 
+static t_bowl	*philo_create_bowl(uint64_t number)
+{
+	t_bowl		*spaghetti;
+	uint64_t	i;
+
+	spaghetti = (t_bowl *)malloc(sizeof(t_bowl));
+	if (spaghetti == NULL)
+		return (NULL);
+	i = 0;
+	spaghetti->is_getting_eaten = (int *)malloc(sizeof(int) * (number + 1));
+	if (spaghetti->is_getting_eaten == NULL)
+		return (free(spaghetti), NULL);
+	while (i < number)
+	{
+		spaghetti->is_getting_eaten[i] = 0;
+		i++;
+	}
+	spaghetti->is_getting_eaten[number] = -1;
+	return (spaghetti);
+}
+
 t_table	*philo_sit_at_table(t_philo *philosophers)
 {
 	t_table		*table;
@@ -85,9 +106,12 @@ t_table	*philo_sit_at_table(t_philo *philosophers)
 	number_of_philosophers = philo_count_philosophers(philosophers);
 	if (number_of_philosophers == 0)
 		return (NULL);
-	table = philo_create_table(table, number_of_philosophers);
+	table = philo_create_table(NULL, number_of_philosophers);
 	if (table == NULL)
 		return (NULL);
+	spaghetti = philo_create_bowl(number_of_philosophers);
+	if (spaghetti == NULL)
+		return (free(table), NULL);
 	i = 0;
 	while (i < number_of_philosophers)
 	{
