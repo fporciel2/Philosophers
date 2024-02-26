@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:22:16 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 12:27:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:36:58 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -62,24 +62,26 @@
 # define TIME_TO_THINK 2
 # define TIME_TO_SLEEP 3
 
+typedef struct s_forks
+{
+	struct s_forks	*forks;
+}					t_forks;
+
 typedef struct s_philo
 {
-	int	is;
-	int	is_eating;
-	int	is_thinking;
-	int	is_sleeping;
-}		t_philo;
+	int		is;
+	int		is_eating;
+	int		is_thinking;
+	int		is_sleeping;
+	t_fork	*right_fork;
+	t_fork	*left_fork;
+}			t_philo;
 
 typedef struct s_bowl
 {
 	int	test_value;
 	int	*is_getting_eaten;
 }		t_bowl;
-
-typedef struct s_forks
-{
-	struct s_forks	*forks;
-}					t_forks;
 
 typedef struct s_table
 {

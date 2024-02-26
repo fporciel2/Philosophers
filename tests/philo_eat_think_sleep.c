@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 09:44:27 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 12:09:08 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:41:10 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation that implements a solution to the dining
@@ -38,6 +38,9 @@
  * The philosophers alternatively eat, think or sleep. While they are eating,
  * they are not thinking nor sleeping; while thinking, they are not eating nor
  * sleeping; and, of course, while sleeping, they are not eating nor thinking.
+ *
+ * Because serving and eating spaghetti with only one fork is very inconvenient,
+ * a philosopher takes their right and left forks to eat, one in each hand.
  */
 
 #include "philo.h"
@@ -49,6 +52,7 @@ static int	philo_eat(t_philo *philosophers, t_table *table)
 	i = 0;
 	while (philosophers[i].is != 0)
 	{
+
 		philosophers[i].is_eating = 1;
 		table->spaghetti->is_getting_eaten[i] = 1;
 		i++;
