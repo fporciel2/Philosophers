@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 13:22:16 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 10:55:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:27:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -76,6 +76,11 @@ typedef struct s_bowl
 	int	*is_getting_eaten;
 }		t_bowl;
 
+typedef struct s_forks
+{
+	struct s_forks	*forks;
+}					t_forks;
+
 typedef struct s_table
 {
 	uint64_t		test_value;
@@ -83,13 +88,16 @@ typedef struct s_table
 	struct s_bowl	*spaghetti;
 	struct s_table	*table;
 	struct s_table	*next;
+	struct s_forks	*forks;
 }					t_table;
 
 /* Procedure's prototypes. */
 t_table	*philo_sit_at_table(t_philo *philosophers);
 int		philo_eat_think_sleep(t_philo *philosophers, t_table *table, int time);
+t_forks	*philo_place_forks(t_philo *philosophers, t_table *table);
 /* Cleaning on failure prototypes. */
 /* Cleaning on success prototypes. */
 t_table	*philo_clean_table(t_table *table);
+t_forks	*philo_clean_forks(t_forks *forks);
 
 #endif
