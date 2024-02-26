@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 13:29:54 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/25 16:15:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/26 09:41:35 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation that implements a solution to the dining
@@ -61,6 +61,78 @@ static t_table	*philo_create_table(t_table *table, uint64_t number)
 	table = (t_table *)malloc(sizeof(t_table) * number);
 	if (table == NULL)
 		return (NULL);
+	if (number != 1)
+	{
+		while (i < (number - 1))
+		{
+			table[i].table = table;
+			table[i].next = &table[i + 1];
+			i++;
+		}
+	}
+	table[i].table = table;
+	table[i].next = &table[0];
+	return (table);
+}
+
+t_table	*philo_sit_at_table(t_philo *philosophers)
+{
+	t_table		*table;
+	t_bowl		*spaghetti;
+	uint64_t	number_of_philosophers;
+	uint64_t	i;
+
+	number_of_philosophers = philo_count_philosophers(philosophers);
+	if (number_of_philosophers == 0)
+		return (NULL);
+	table = philo_create_table(table, number_of_philosophers);
+	if (table == NULL)
+		return (NULL);
+	i = 0;
+	while (i < number_of_philosophers)
+	{
+		table[i].philosopher = &philosophers[i];
+		table[i].spaghetti = spaghetti;
+		i++;
+	}
+	return (table);
+}
+/* TEST_PHILO_SIT_AT_TABLE
+ *
+ * To test the algorithm:
+ *
+ * 'gcc -std=c17 -pedantic-errors -Wall -Wextra -Werror -I$(pwd) philo.h
+ * philo_sit_at_table.c philo_clean_table.c -lc -o test_philo_sit_at_table'
+ *
+ * To test the memory:
+ *
+ * 'valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
+ * --show-reachable=yes -show-error-list=yes -s -v ./test_philo_sit_at_table'
+ *
+ *  The test is passed.
+ *
+ ***************************************************************************
+static uint64_t	philo_count_philosophers(t_philo *philosophers)
+{
+	uint64_t	i;
+
+	i = 0;
+	if (philosophers)
+	{
+		while (philosophers[i].is != 0)
+			i++;
+	}
+	return (i);
+}
+
+static t_table	*philo_create_table(t_table *table, uint64_t number)
+{
+	uint64_t	i;
+
+	i = 0;
+	table = (t_table *)malloc(sizeof(t_table) * number);
+	if (table == NULL)
+		return (NULL);
 	printf("Table created.\n");
 	if (number != 1)
 	{
@@ -80,6 +152,8 @@ static t_table	*philo_create_table(t_table *table, uint64_t number)
 		}
 	}
 	table[i].table = table;
+	table[i].test_value = i + 1;
+	printf("Test value for table %lu: %lu.\n", i, table[i].test_value);
 	printf("Head of table %lu: %lu.\n", table[i].test_value,
 			table[i].table->test_value);
 	table[i].next = &table[0];
@@ -113,21 +187,18 @@ t_table	*philo_sit_at_table(t_philo *philosophers)
 	{
 		printf("Index of table: %lu.\n", i);
 		table[i].philosopher = &philosophers[i];
-		printf("Philosopher %lu sits at table.\n", table[i].philosopher->is);
+		printf("Philosopher %d sits at table.\n", table[i].philosopher->is);
 		table[i].spaghetti = spaghetti;
 		printf("Spaghetti assigned: %d.\n", table[i].spaghetti->test_value);
 		i++;
 	}
 	return (table);
 }
-/* 
- * Let's test this module.
- */
+
 int	main(void)
 {
 	t_philo		philosophers[10];
 	t_philo		philosophers1[11];
-	t_philo		philosophers2[0];
 	t_philo		philosophers3[1];
 	t_philo		philosophers4[2];
 	t_philo		philosophers5[3];
@@ -158,10 +229,6 @@ int	main(void)
 	if (table == NULL)
 		return (printf("Failure in allocating table\n"));
 	philo_clean_table(table);
-	i = 0;
-	philosophers2[i].is = 0;
-	printf("\nSTARTING TEST ON PHILOSOPHERS 2\n");
-	table = philo_sit_at_table(philosophers2);
 	i = 0;
 	while (i < 1)
 	{
@@ -200,4 +267,4 @@ int	main(void)
 	philo_clean_table(table);
 	printf("\nTEST ON PHILOSOPHERS PASSED\n");
 	return (0);
-}
+}*/
