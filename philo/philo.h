@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 14:52:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 16:18:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -96,6 +96,19 @@ typedef struct s_data
 	pthread_mutex_t	*stdout_mutex;
 }					t_data;
 
+typedef struct s_info
+{
+	pthread_mutex_t	*stdout_mutex;
+	useconds_t		time_to_die;
+	useconds_t		time_to_eat;
+	useconds_t		time_to_sleep;
+	uint64_t		id;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	uint64_t		*last_meal;
+	pthread_mutex_t	*timestamp;
+}
+
 int			philo_take_numbers(t_input *input, char **argv, int argc);
 int			philo_take_times(t_input *input, char **argv);
 uint64_t	philo_atolui(char *str);
@@ -107,5 +120,9 @@ int			philo_god(t_data *data);
 uint64_t	philo_get_time(void);
 uint64_t	philo_log(uint64_t id, char *str, uint64_t timestamp,
 				pthread_mutex_t *stdout_mutex);
+int			philo_start_meal(t_data *data);
+int			philo_join_meal(t_data *data);
+int			philo_start_sleep(t_data *data);
+int			philo_join_sleep(t_data *data);
 
 #endif
