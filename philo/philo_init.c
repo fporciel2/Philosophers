@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 09:28:24 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 11:54:51 by fporciel         ###   ########.fr       */
+/*   Created: 2024/02/28 11:55:14 by fporciel          #+#    #+#             */
+/*   Updated: 2024/02/28 12:09:09 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,18 +30,36 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This is the main file.
+ * This part of the program initializes the variables used in the simulation and
+ * starts the simulation.
  */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+static int	philo_uninit(t_philo *philosophers, t_fork *forks,
+		t_tmstmp *timestamps)
 {
-	t_input	input;
+	if (philosophers)
+		free(philosophers);
+	if (forks)
+		free(forks);
+	if (timestamps)
+		free(timestamps);
+	return (0);
+}
 
-	if ((argc < 5) || (argc > 6)
-		|| (!philo_take_numbers(&input, argv, argc))
-		|| (!philo_take_times(&input, argv)))
-		return (0);
-	return (philo_init(&input));
+int	philo_init(t_input *input)
+{
+	t_philo		*philosophers;
+	t_fork		*forks;
+	t_tmstmp	*timestamps;
+
+	philosophers = (t_philo *)malloc(sizeof(t_philo)
+			* (input->number_of_philosophers + 1));
+	forks = (t_fork *)malloc(sizeof(t_fork)
+			* (input->number_of_philosophers + 1));
+	timestamps = (t_tmstmp *)malloc(sizeof(t_tmstmp)
+			* (input->number_of_philosophers + 1));
+	if (!philosophers || !forks || !timestamps)
+		return (philo_uninit(philosophers, forks, timestamps));
 }

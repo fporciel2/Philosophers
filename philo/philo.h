@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 10:24:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:03:38 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -58,6 +58,24 @@
 # include <sys/time.h>
 # include <pthread.h>
 
+typedef struct s_philo
+{
+	uint64_t	id;
+	pthread_t	philosopher;
+}				t_philo;
+
+typedef struct s_fork
+{
+	uint64_t		id;
+	pthread_mutex_t	fork;
+}					t_fork;
+
+typedef struct s_tmstmp
+{
+	uint64_t	id;
+	uint64_t	last_meal;
+}				t_tmstmp;
+
 typedef struct s_input
 {
 	uint64_t	number_of_philosophers;
@@ -70,5 +88,6 @@ typedef struct s_input
 int			philo_take_numbers(t_input *input, char **argv, int argc);
 int			philo_take_times(t_input *input, char **argv);
 uint64_t	philo_atolui(char *str);
+int			philo_init(t_input *input);
 
 #endif
