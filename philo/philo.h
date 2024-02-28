@@ -6,11 +6,11 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/26 15:52:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 10:24:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
- * 'Philosopher' is a simulation of a solution to the dining philosophers
+ * 'Philosophers' is a simulation of a solution to the dining philosophers
  * problem.
  * Copyright (C) 2024 Federico Porciello
  *
@@ -45,6 +45,8 @@
 # define SLEEP "is sleeping"
 # define FORK "has taken a fork"
 # define DEAD "is dead"
+# define AINT64MAX "18446744073709551615"
+# define AINT64MAXLEN 20
 # include <time.h>
 # include <sys/types.h>
 # include <stdint.h>
@@ -56,16 +58,17 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_philo
+typedef struct s_input
 {
-	int			is_dead;
-	int			last_time;
-	uint64_t	id;
-}				t_philo;
+	uint64_t	number_of_philosophers;
+	useconds_t	time_to_die;
+	useconds_t	time_to_eat;
+	useconds_t	time_to_sleep;
+	uint64_t	number_of_times_each_philosopher_must_eat;
+}				t_input;
 
-void	philo_log(char *str, t_philo *philosopher);
-int		philo_get_time(void);
-void	philo_sleep(int time, t_philo *philosopher);
-int		philo_is_dead(t_philo *philosopher);
+int			philo_take_numbers(t_input *input, char **argv, int argc);
+int			philo_take_times(t_input *input, char **argv);
+uint64_t	philo_atolui(char *str);
 
 #endif
