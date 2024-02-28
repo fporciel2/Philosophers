@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:58:52 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 14:52:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -44,7 +44,7 @@
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define FORK "has taken a fork"
-# define DEAD "is dead"
+# define DEAD "died"
 # define AINT64MAX "18446744073709551615"
 # define AINT64MAXLEN 20
 # include <time.h>
@@ -72,9 +72,10 @@ typedef struct s_fork
 
 typedef struct s_tmstmp
 {
-	uint64_t	id;
-	uint64_t	last_meal;
-}				t_tmstmp;
+	uint64_t		id;
+	uint64_t		last_meal;
+	pthread_mutex_t	timestamp;
+}					t_tmstmp;
 
 typedef struct s_input
 {
@@ -103,5 +104,8 @@ int			philo_start_simulation(t_data *data);
 int			philo_cleaner(t_data *data);
 int			philo_destroyer(t_data *data);
 int			philo_god(t_data *data);
+uint64_t	philo_get_time(void);
+uint64_t	philo_log(uint64_t id, char *str, uint64_t timestamp,
+				pthread_mutex_t *stdout_mutex);
 
 #endif

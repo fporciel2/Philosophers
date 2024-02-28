@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_god.c                                        :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 12:59:54 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 15:01:43 by fporciel         ###   ########.fr       */
+/*   Created: 2024/02/28 14:00:48 by fporciel          #+#    #+#             */
+/*   Updated: 2024/02/28 14:51:50 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,50 +30,24 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This function is a Leibnizian definer of pre-established harmony.
+ * 'philo_get_time' takes the current timestamp in milliseconds.
  */
 
 #include "philo.h"
 
-static int	philo_god_infinite_world(t_data *data)
+uint64_t	philo_get_time(void)
 {
-	while (1)
-	{
-		if (!philo_start_meal(data)
-			|| !philo_join_meal(data)
-			|| !philo_start_sleep(data)
-			|| !philo_join_sleep(data))
-			return (philo_destroyer(data));
-	}
-	return (philo_destroyer(data));
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-static int	philo_god_finite_world(t_data *data)
+uint64_t	philo_log(uint64_t id, char *str, uint64_t timestamp,
+				pthread_mutex_t *lock)
 {
-	while (data->input->number_of_times_each_philosopher_must_eat--)
-	{
-		if (!philo_start_meal(data)
-			|| !philo_join_meal(data)
-			|| !philo_start_sleep(data)
-			|| !philo_join_sleep(data))
-			return (philo_destroyer(data));
-	}
-	return (philo_destroyer(data));
-}
-
-static int	philo_god_solipsistic_world(t_data *data)
-{
-	usleep(data->input->time_to_die);
-	return (philo_log(data->philosophers[0].id, DEAD, philo_get_time(),
-			data->stdout_mutex));
-}
-
-int	philo_god(t_data *data)
-{
-	if (data->input->number_of_philosophers == 1)
-		return (philo_god_solipsistic_world(data));
-	else if (data->input->argc == 5)
-		return (philo_god_finite_world(data));
-	else
-		return (philo_god_infinite_world(data));
+	pthread_mutex_lock(lock);
+	printf("[%lu]: %lu %s\n", timestamp, id, str);
+	pthread_mutex_unlock(lock);
+	return (philo_get_time());
 }
