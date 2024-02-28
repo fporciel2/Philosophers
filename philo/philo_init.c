@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 11:55:14 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:09:09 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:22:46 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -48,6 +48,40 @@ static int	philo_uninit(t_philo *philosophers, t_fork *forks,
 	return (0);
 }
 
+static int	philo_init_data(t_philo *philosophers, t_fork *forks,
+		t_tmstmp *timestamps, t_input *input)
+{
+	t_data	data;
+
+	data.philosophers = philosophers;
+	data.forks = forks;
+	data.timestamps = timestamps;
+	data.input = input;
+	return (philo_start_simulation(&data));
+}
+
+static int	philo_label_arrays(t_philo *philosophers, t_fork *forks,
+		t_tmstmp *timestamps, t_input *input)
+{
+	uint64_t	i;
+	uint64_t	id;
+
+	i = 0;
+	id = 1;
+	while (i < input->number_of_philosophers)
+	{
+		philosophers[i].id = id;
+		forks[i].id = id;
+		timestamps[i].id = id;
+		id++;
+		i++;
+	}
+	philosophers[i].id = 0;
+	forks[i].id = 0;
+	timestamps[i].id = 0;
+	return (philo_init_data(philosophers, forks, timestamps, input));
+}
+
 int	philo_init(t_input *input)
 {
 	t_philo		*philosophers;
@@ -62,4 +96,5 @@ int	philo_init(t_input *input)
 			* (input->number_of_philosophers + 1));
 	if (!philosophers || !forks || !timestamps)
 		return (philo_uninit(philosophers, forks, timestamps));
+	return (philo_label_arrays(philosophers, forks, timestamps, input));
 }

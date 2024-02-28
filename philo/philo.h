@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:03:38 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:23:23 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -85,9 +85,18 @@ typedef struct s_input
 	uint64_t	number_of_times_each_philosopher_must_eat;
 }				t_input;
 
+typedef struct s_data
+{
+	struct s_philo	*philosophers;
+	struct s_fork	*forks;
+	struct s_tmstmp	*timestamps;
+	struct s_input	*input;
+}					t_data;
+
 int			philo_take_numbers(t_input *input, char **argv, int argc);
 int			philo_take_times(t_input *input, char **argv);
 uint64_t	philo_atolui(char *str);
 int			philo_init(t_input *input);
+int			philo_start_simulation(t_data *data);
 
 #endif
