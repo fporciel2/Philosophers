@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:26:25 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:39:53 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -92,6 +92,7 @@ typedef struct s_data
 	struct s_fork	*forks;
 	struct s_tmstmp	*timestamps;
 	struct s_input	*input;
+	pthread_mutex_t	*stdout_mutex;
 }					t_data;
 
 int			philo_take_numbers(t_input *input, char **argv, int argc);
@@ -99,5 +100,6 @@ int			philo_take_times(t_input *input, char **argv);
 uint64_t	philo_atolui(char *str);
 int			philo_init(t_input *input);
 int			philo_start_simulation(t_data *data);
+int			philo_cleaner(t_data *data);
 
 #endif
