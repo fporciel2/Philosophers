@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:23:23 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:26:25 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -83,6 +83,7 @@ typedef struct s_input
 	useconds_t	time_to_eat;
 	useconds_t	time_to_sleep;
 	uint64_t	number_of_times_each_philosopher_must_eat;
+	int			argc;
 }				t_input;
 
 typedef struct s_data

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 09:28:24 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 11:54:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:26:58 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,5 +43,6 @@ int	main(int argc, char **argv)
 		|| (!philo_take_numbers(&input, argv, argc))
 		|| (!philo_take_times(&input, argv)))
 		return (0);
+	input.argc = (argc - 1);
 	return (philo_init(&input));
 }
