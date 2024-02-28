@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:39:53 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:58:52 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -101,5 +101,7 @@ uint64_t	philo_atolui(char *str);
 int			philo_init(t_input *input);
 int			philo_start_simulation(t_data *data);
 int			philo_cleaner(t_data *data);
+int			philo_destroyer(t_data *data);
+int			philo_god(t_data *data);
 
 #endif

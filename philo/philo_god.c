@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_cleaner.c                                    :+:      :+:    :+:   */
+/*   philo_god.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 12:40:10 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:57:21 by fporciel         ###   ########.fr       */
+/*   Created: 2024/02/28 12:59:54 by fporciel          #+#    #+#             */
+/*   Updated: 2024/02/28 13:07:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,34 +30,11 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This is a little cleaner.
+ * This function is god: it is a Leibnizian definer of pre-established harmony.
  */
 
 #include "philo.h"
 
-int	philo_cleaner(t_data *data)
+int	philo_god(t_data *data)
 {
-	if (data->philosophers)
-		free(data->philosophers);
-	if (data->forks)
-		free(data->forks);
-	if (data->timestamps)
-		free(data->timestamps);
-	if (data->stdout_mutex)
-		free(data->stdout_mutex);
-	return (0);
-}
-
-int	philo_destroyer(t_data *data)
-{
-	uint64_t	i;
-
-	i = 0;
-	pthread_mutex_destroy(&data->stdout_mutex);
-	while (data->philosophers[i].id)
-	{
-		pthread_mutex_destroy(&data->forks[i].fork);
-		i++;
-	}
-	return (philo_cleaner(data));
 }

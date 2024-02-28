@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 12:29:02 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 12:52:11 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/28 12:56:41 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,7 +43,7 @@ static int	philo_init_mutexes(t_data *data)
 	pthread_mutex_init(&data->stdout_mutex, NULL);
 	while (data->philosophers[i].id)
 	{
-		pthread_mutex_init(&data->philosophers[i].fork, NULL);
+		pthread_mutex_init(&data->forks[i].fork, NULL);
 		i++;
 	}
 	return (philo_god(data));
