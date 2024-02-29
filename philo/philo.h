@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/29 11:36:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:15:31 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -125,5 +125,9 @@ int			philo_join_meal(t_data *data);
 int			philo_start_sleep(t_data *data);
 int			philo_join_sleep(t_data *data);
 void		*philo_meal_routine(void *info);
+int			philo_check_death_before_meal(t_data *data, uint64_t id);
+/* Since philo_god cleans if philo_start/join_meal/sleep returns 0, philo_killer
+ * should return 0 as well. */
+int			philo_killer(t_data *data, uint64_t i, uint64_t id);
 
 #endif

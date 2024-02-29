@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 15:22:43 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/29 11:46:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:10:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -83,7 +83,11 @@ int	philo_start_meal(t_data *data)
 	i = 0;
 	while (data->philosophers[i].id)
 	{
-		pthread_create(&data->philosophers[i].philosopher, NULL,
+		if ((data->timestamps[i].last_meal != 0)
+			&& (philo_check_death_before_meal(data,
+				data->philosophers[i].id)))
+			return (philo_killer(data, i, data->philosophers[i].id));
+		pthread_create(&data->philosophers[i].posopher, NULL,
 			philo_meal_routine, (void *)&info);
 		i++;
 	}
