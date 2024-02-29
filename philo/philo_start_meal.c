@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 15:22:43 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/29 11:36:20 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:46:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -78,6 +78,11 @@ int	philo_start_meal(t_data *data)
 	{
 		philo_assign_resources_coordinates(data, &info, i);
 		philo_assign_forks(data, &info, i);
+		i++;
+	}
+	i = 0;
+	while (data->philosophers[i].id)
+	{
 		pthread_create(&data->philosophers[i].philosopher, NULL,
 			philo_meal_routine, (void *)&info);
 		i++;
