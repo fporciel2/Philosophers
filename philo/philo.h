@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/29 12:15:31 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:46:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -98,6 +98,7 @@ typedef struct s_data
 
 typedef struct s_info
 {
+	struct s_data	*data;
 	pthread_mutex_t	*stdout_mutex;
 	useconds_t		time_to_die;
 	useconds_t		time_to_eat;
@@ -129,5 +130,7 @@ int			philo_check_death_before_meal(t_data *data, uint64_t id);
 /* Since philo_god cleans if philo_start/join_meal/sleep returns 0, philo_killer
  * should return 0 as well. */
 int			philo_killer(t_data *data, uint64_t i, uint64_t id);
+/* To add: philo_check_death_before_right_fork and philo_check_death_before_eat.
+ * */
 
 #endif
