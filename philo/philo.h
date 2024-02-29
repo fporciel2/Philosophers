@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 15:14:06 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 16:18:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:36:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -107,7 +107,7 @@ typedef struct s_info
 	pthread_mutex_t	*left_fork;
 	uint64_t		*last_meal;
 	pthread_mutex_t	*timestamp;
-}
+}					t_info;
 
 int			philo_take_numbers(t_input *input, char **argv, int argc);
 int			philo_take_times(t_input *input, char **argv);
@@ -124,5 +124,6 @@ int			philo_start_meal(t_data *data);
 int			philo_join_meal(t_data *data);
 int			philo_start_sleep(t_data *data);
 int			philo_join_sleep(t_data *data);
+void		*philo_meal_routine(void *info);
 
 #endif

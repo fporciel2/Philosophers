@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/28 15:22:43 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 16:08:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:36:20 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -36,4 +36,51 @@
 
 #include "philo.h"
 
+static void	philo_assign_forks(t_data *data, t_info *info, uint64_t i)
+{
+	if ((info->id == data->input->number_of_philosophers)
+		&& ((info->id % 2 != 0)))
+	{
+		info->right_fork = &data->forks[i - 2].fork;
+		info->left_fork = &data->forks[i].fork;
+	}
+	else if ((info->id % 2) != 0)
+	{
+		info->right_fork = &data->forks[i].fork;
+		info->left_fork = &data->forks[i + 1].fork;
+	}
+	else
+	{
+		info->right_fork = &data->forks[i - 1].fork;
+		info->left_fork = &data->forks[i].fork;
+	}
+}
+
+static void	philo_assign_resources_coordinates(t_data *data, t_info *info,
+		uint64_t i)
+{
+	info->stdout_mutex = data->stdout_mutex;
+	info->time_to_die = data->input->time_to_die;
+	info->time_to_eat = data->input->time_to_eat;
+	info->time_to_sleep = data->input->time_to_sleep;
+	info->id = data->philosophers[i].id;
+	info->last_meal = data->timestamps[i].last_meal;
+	info->timestamp = &data->timestamps[i].timestamp;
+}
+
 int	philo_start_meal(t_data *data)
+{
+	uint64_t	i;
+	t_info		info;
+
+	i = 0;
+	while (data->philosophers[i].id)
+	{
+		philo_assign_resources_coordinates(data, &info, i);
+		philo_assign_forks(data, &info, i);
+		pthread_create(&data->philosophers[i].philosopher, NULL,
+			philo_meal_routine, (void *)&info);
+		i++;
+	}
+	return (1);
+}
