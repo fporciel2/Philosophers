@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:15:26 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 15:38:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:54:31 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -125,4 +125,6 @@ void	philo_number_of_philosophers(char *str, t_input *input)
 		input->badthreads = BADTHREADS;
 		return ;
 	}
+	if ((input->number_of_philosophers % 2) == 0)
+		input->is_even = 1;
 }

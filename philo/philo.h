@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 15:41:33 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:56:53 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -98,7 +98,7 @@ typedef struct s_local
 /* Parsing functions.*/
 void	philo_init_input(t_input *input);
 void	philo_number_of_philosophers(char *argv, t_input *input);
-void	philo_init_time(char *argv, t_input *input);
+void	philo_init_time(char *argv, t_input *input, int param);
 void	philo_number_of_times_each_philosopher_must_eat(char *argv, t_input *i);
 int		philo_input_is_not_valid(t_input *input);
 /* Initialization functions. */

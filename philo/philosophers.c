@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 15:44:43 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 16:21:13 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -35,7 +35,7 @@
 
 #include "philo.h"
 
-static int	philo_normal_execution(t_input *input, t_gdata *global_data)
+/*static int	philo_normal_execution(t_input *input, t_gdata *global_data)
 {
 	pthread_t	odd;
 	pthread_t	even;
@@ -75,11 +75,11 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 		return (philo_special_execution(global_data));
 	return (philo_normal_execution(input, global_data));
 }
-
+*/
 int	main(int argc, char **argv)
 {
 	t_input	input;
-	t_gdata	global_data;
+	//t_gdata	global_data;
 
 	argc--;
 	argv++;
@@ -87,12 +87,24 @@ int	main(int argc, char **argv)
 		return (0);
 	philo_init_input(&input);
 	philo_number_of_philosophers(argv[0], &input);
-	philo_init_time(argv[1], &input);
-	philo_init_time(argv[2], &input);
-	philo_init_time(argv[3], &input);
+	philo_init_time(argv[1], &input, 0);
+	philo_init_time(argv[2], &input, 1);
+	philo_init_time(argv[3], &input, 2);
+	printf("Number_of_philosophers: %lu\n", input.number_of_philosophers);
+	printf("Time_to_die: %u\n", input.time_to_die);
+	printf("Time_to_eat: %u\n", input.time_to_eat);
+	printf("Time_to_sleep: %u\n", input.time_to_sleep);
+	printf("Is Valid: %d\n", input.is_valid);
+	printf("Is Special: %d\n", input.is_special);
+	printf("Is Even: %d\n", input.is_even);
+	printf("-%s\n-%s\n-%s\n-%s\n-%s\n", input.badnop, input.badthreads,
+		input.badttd, input.badtte, input.badtts);
+	return (0);
+}
+	/*
 	if (argc == 5)
 		philo_number_of_times_each_philosopher_must_eat(arv[4], &input);
 	if (!input.is_valid)
 		return (philo_input_is_not_valid(&input));
 	return (philo_initialize(&input, &global_data);
-}
+}*/
