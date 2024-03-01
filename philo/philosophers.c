@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 11:24:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 12:10:38 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -35,6 +35,29 @@
 
 #include "philo.h"
 
+static int	philo_normal_execution(t_input *input, t_gdata *global_data,
+		t_ldata *local_data)
+{
+}
+
+static int	philo_initialize(t_input *input, t_gdata *global_data,
+		t_ldata *local_data)
+{
+	philo_init_global_data(global_data);
+	philo_init_local_data(local_data);
+	if (!philo_init_philosophers(input, global_data)
+		|| !philo_init_forks(global_data)
+		|| !philo_init_mutexes(global_data)
+		|| !philo_init_timestamps(global_data))
+		return (0);
+	philo_globalize_times(input, global_data);
+	if (input->is_limited)
+		philo_set_iterations(input, global_data);
+	if (input->is_special)
+		return (philo_special_execution(global_data));
+	return (philo_normal_execution(input, global_data, local_data));
+}
+
 int	main(int argc, char **argv)
 {
 	t_input	input;
@@ -54,4 +77,5 @@ int	main(int argc, char **argv)
 		philo_number_of_times_each_philosopher_must_eat(arv[4], &input);
 	if (!input.is_valid)
 		return (philo_input_is_not_valid(&input));
+	return (philo_initialize(&input, &global_data, &local_data));
 }

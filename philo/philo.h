@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 11:26:41 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 12:05:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -70,5 +70,15 @@ void	philo_number_of_philosophers(char *argv, t_input *input);
 void	philo_init_time(char *argv, t_input *input);
 void	philo_number_of_times_each_philosopher_must_eat(char *argv, t_input *i);
 int		philo_input_is_not_valid(t_input *input);
+/* Initialization functions. */
+void	philo_init_global_data(t_gdata *global_data);
+void	philo_init_local_data(t_ldata *local_data);
+int		philo_init_philosophers(t_input *input, t_gdata *global_data);
+int		philo_init_forks(t_gdata *global_data);
+int		philo_init_mutexes(global_data);
+int		philo_init_timestamps(t_gdata *global_data);
+void	philo_globalize_times(t_input *input, t_gdata *global_data);
+void	philo_set_iterations(t_input *input, t_gdata *global_data);
+int		philo_special_execution(t_gdata *global_data);
 
 #endif
