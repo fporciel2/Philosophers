@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 10:48:33 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 11:26:41 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -31,7 +31,7 @@
  * see:
  * https://github.com/fporciel2/Philosophers
  *
- * This is the header file.
+ * This is the header file of the entire program.
  */
 
 #ifndef PHILO_H
@@ -47,6 +47,12 @@
 # define DEAD "died"
 # define AINT64MAX "18446744073709551615"
 # define AINT64MAXLEN 20
+# define BADNOP "insert a positive integer less than 18446744073709551615."
+# define BADTHREADS "see 'cat /proc/sys/kernel/threads-max' for max threads."
+# define BADTTD "insert a positive integer less than 1000."
+# define BADTTE "insert a positive integer less than 1000."
+# define BADTTS "insert a positive integer less than 1000."
+# define BADNOTEPME "insert a positive integer less than 18446744073709551615."
 # include <time.h>
 # include <sys/types.h>
 # include <stdint.h>
@@ -57,5 +63,12 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+/* Parsing functions.*/
+void	philo_init_input(t_input *input);
+void	philo_number_of_philosophers(char *argv, t_input *input);
+void	philo_init_time(char *argv, t_input *input);
+void	philo_number_of_times_each_philosopher_must_eat(char *argv, t_input *i);
+int		philo_input_is_not_valid(t_input *input);
 
 #endif
