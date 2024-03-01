@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_god.c                                        :+:      :+:    :+:   */
+/*   philo_meal_routine.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 12:59:54 by fporciel          #+#    #+#             */
-/*   Updated: 2024/02/28 15:01:43 by fporciel         ###   ########.fr       */
+/*   Created: 2024/02/29 12:17:26 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/01 10:38:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,50 +30,44 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This function is a Leibnizian definer of pre-established harmony.
+ * This part of the program is the meal routine.
  */
 
 #include "philo.h"
 
-static int	philo_god_infinite_world(t_data *data)
+void	philo_eat(t_info *info)
 {
-	while (1)
-	{
-		if (!philo_start_meal(data)
-			|| !philo_join_meal(data)
-			|| !philo_start_sleep(data)
-			|| !philo_join_sleep(data))
-			return (philo_destroyer(data));
-	}
-	return (philo_destroyer(data));
+	philo_log(info->id, EAT, philo_get_time(), info->stdout_mutex);
+	usleep(info->time_to_eat);
+	pthread_mutex_lock(info->timestamp);
+	*info->timestamp->last_meal = philo_get_time();
+	pthread_mutex_unlock(info->right_fork);
+	pthread_mutex_unlock(info->left_fork);
+	pthread_mutex_unlock(info->timestamp);
 }
 
-static int	philo_god_finite_world(t_data *data)
+void	philo_take_forks(t_info *info)
 {
-	while (data->input->number_of_times_each_philosopher_must_eat--)
-	{
-		if (!philo_start_meal(data)
-			|| !philo_join_meal(data)
-			|| !philo_start_sleep(data)
-			|| !philo_join_sleep(data))
-			return (philo_destroyer(data));
-	}
-	return (philo_destroyer(data));
+	pthread_mutex_lock(info->right_fork);
+	philo_log(info->id, FORK, philo_get_time(), info->stdout_mutex);
+	pthread_mutex_lock(info->left_fork);
+	philo_log(info->id, FORK, philo_get_time(), info->stdout_mutex);
 }
 
-static int	philo_god_solipsistic_world(t_data *data)
+void	*philo_meal_routine(void *info)
 {
-	usleep(data->input->time_to_die);
-	return (philo_log(data->philosophers[0].id, DEAD, philo_get_time(),
-			data->stdout_mutex));
-}
+	t_info	*info_copy;
 
-int	philo_god(t_data *data)
-{
-	if (data->input->number_of_philosophers == 1)
-		return (philo_god_solipsistic_world(data));
-	else if (data->input->argc == 5)
-		return (philo_god_finite_world(data));
-	else
-		return (philo_god_infinite_world(data));
+	info_copy = (t_info *)info;
+	pthread_mutex_lock(info_copy->timestamp);
+	if (*info_copy->timestamp->last_meal == 0)
+		*info_copy->timestamp->last_meal = philo_get_time();
+	pthread_mutex_unlock(info_copy->timestamp);
+	philo_take_forks(info_copy);
+	if (philo_check_death_before_right_fork(info_copy))
+		return (NULL);
+	philo_take_forks(info_copy);
+	if (philo_check_death_before_eat(info_copy))
+		return (NULL);
+	philo_eat(info_copy);
 }
