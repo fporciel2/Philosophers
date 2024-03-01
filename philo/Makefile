@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/01 13:03:35 by fporciel          #+#    #+#              #
-#    Updated: 2024/03/01 14:03:05 by fporciel         ###   ########.fr        #
+#    Updated: 2024/03/01 15:45:27 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -96,7 +96,7 @@ remem: fclean memtest
 
 rethread: fclean threadtest
 
-autogit:
+autogit: fclean
 	@git status
 	@git add *
 	@git status

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 14:22:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:41:33 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -48,7 +48,7 @@
 # define AINT64MAX "18446744073709551615"
 # define AINT64MAXLEN 20
 # define BADNOP "insert a positive integer less than 18446744073709551615."
-# define BADTHREADS "see 'cat /proc/sys/kernel/threads-max' for max threads."
+# define BADTHREADS "maximum: '(cat /proc/sys/kernel/threads-max) - 3'"
 # define BADTTD "insert a positive integer less than 1000."
 # define BADTTE "insert a positive integer less than 1000."
 # define BADTTS "insert a positive integer less than 1000."
@@ -78,9 +78,22 @@ typedef struct s_input
 	char		*badnop;
 	char		*badthreads;
 	char		*badttd;
+	char		*badtte;
 	char		*badtts;
 	char		*badnotepme;
 }				t_input;
+
+typedef struct s_gdata
+{
+	int	is_over;
+}		t_gdata;
+
+typedef struct s_local
+{
+	pthread_t	*odd;
+	pthread_t	*even;
+	pthread_t	*last_three;
+}				t_local;
 
 /* Parsing functions.*/
 void	philo_init_input(t_input *input);
@@ -92,7 +105,7 @@ int		philo_input_is_not_valid(t_input *input);
 void	philo_init_global_data(t_gdata *global_data);
 int		philo_init_philosophers(t_input *input, t_gdata *global_data);
 int		philo_init_forks(t_gdata *global_data);
-int		philo_init_mutexes(global_data);
+int		philo_init_mutexes(t_gdata *global_data);
 int		philo_init_timestamps(t_gdata *global_data);
 void	philo_globalize_times(t_input *input, t_gdata *global_data);
 void	philo_set_iterations(t_input *input, t_gdata *global_data);

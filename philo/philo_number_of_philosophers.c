@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:15:26 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 15:21:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 15:38:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -95,7 +95,7 @@ static uint64_t	philo_atolui(char *str, ssize_t len)
 	while (len > 0)
 	{
 		j = len;
-		while (j)
+		while (j - 1)
 		{
 			power_of_ten *= 10;
 			j--;
@@ -103,6 +103,7 @@ static uint64_t	philo_atolui(char *str, ssize_t len)
 		result += (str[i] - 48) * power_of_ten;
 		i++;
 		len--;
+		power_of_ten = 10;
 	}
 	result += (str[i] - 48);
 	return (result);
