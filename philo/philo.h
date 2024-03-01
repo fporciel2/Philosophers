@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 13:02:10 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:22:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -63,6 +63,24 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+typedef struct s_input
+{
+	uint64_t	number_of_philosophers;
+	useconds_t	time_to_die;
+	useconds_t	time_to_eat;
+	useconds_t	time_to_sleep;
+	uint64_t	number_of_times_each_philosopher_must_eat;
+	int			is_valid;
+	int			is_limited;
+	int			is_special;
+	int			is_even;
+	char		*badnop;
+	char		*badthreads;
+	char		*badttd;
+	char		*badtts;
+	char		*badnotepme;
+}				t_input;
 
 /* Parsing functions.*/
 void	philo_init_input(t_input *input);
