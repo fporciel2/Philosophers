@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/01 15:56:53 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 14:57:10 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,6 +47,13 @@
 # define DEAD "died"
 # define AINT64MAX "18446744073709551615"
 # define AINT64MAXLEN 20
+# define NOINPUT "The input is not valid. Please, use the following format:\n"
+# define EXECF "./philo "
+# define NOPF "[number_of_philosophers] "
+# define TTDF "[time_to_die] "
+# define TTEF "[time_to_eat] "
+# define TTSF "[time_to_sleep] "
+# define NTEF "(optional)[number_of_times_each_philosopher_must_eat] \n"
 # define BADNOP "insert a positive integer less than 18446744073709551615."
 # define BADTHREADS "maximum: '(cat /proc/sys/kernel/threads-max) - 3'"
 # define BADTTD "insert a positive integer less than 1000."

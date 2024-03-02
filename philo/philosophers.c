@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:31:16 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 14:45:11 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -84,7 +84,7 @@ int	main(int argc, char **argv)
 	argc--;
 	argv++;
 	if ((argc < 4) || (argc > 5))
-		return (0);
+		return (philo_input_is_not_valid(NULL));
 	philo_init_input(&input);
 	philo_number_of_philosophers(argv[0], &input);
 	philo_init_time(argv[1], &input, 0);
@@ -92,22 +92,10 @@ int	main(int argc, char **argv)
 	philo_init_time(argv[3], &input, 2);
 	if (argc == 5)
 		philo_number_of_times_each_philosopher_must_eat(argv[4], &input);
-	printf("Number_of_philosophers: %lu\n", input.number_of_philosophers);
-	printf("Time_to_die: %u\n", input.time_to_die);
-	printf("Time_to_eat: %u\n", input.time_to_eat);
-	printf("Time_to_sleep: %u\n", input.time_to_sleep);
-	printf("Number_of_times_each_philosopher_must_eat: %lu\n",
-		input.number_of_times_each_philosopher_must_eat);
-	printf("Is Valid: %d\n", input.is_valid);
-	printf("Is Special: %d\n", input.is_special);
-	printf("Is Even: %d\n", input.is_even);
-	printf("Is Limited: %d\n", input.is_limited);
-	printf("-%s\n-%s\n-%s\n-%s\n-%s\n-%s\n", input.badnop, input.badthreads,
-		input.badttd, input.badtte, input.badtts, input.badnotepme);
-	return (0);
-}
-	/*
 	if (!input.is_valid)
 		return (philo_input_is_not_valid(&input));
+	return (0);
+}
+/*
 	return (philo_initialize(&input, &global_data);
 }*/
