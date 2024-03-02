@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_number_of_philosophers.c                     :+:      :+:    :+:   */
+/*   philo_number_of_times_each_philosopher_must_e      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/01 14:15:26 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:22:28 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/02 13:39:29 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/02 14:28:01 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,7 +30,7 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program sets the number of philosophers.
+ * This part of the program sets the number of times each philosopher must eat.
  */
 
 #include "philo.h"
@@ -38,11 +38,11 @@
 static int	philo_invalidate(t_input *input)
 {
 	input->is_valid = 0;
-	input->badnop = BADNOP;
+	input->badnotepme = BADNOTEPME;
 	return (0);
 }
 
-static ssize_t	philo_noplen(char *str, t_input *input)
+static ssize_t	philo_notepmelen(char *str, t_input *i)
 {
 	ssize_t	len;
 
@@ -53,8 +53,8 @@ static ssize_t	philo_noplen(char *str, t_input *input)
 		{
 			if ((str[len] < 48) || (str[len] > 57))
 			{
-				input->is_valid = 0;
-				input->badnop = BADNOP;
+				i->is_valid = 0;
+				i->badnotepme = BADNOTEPME;
 				return (-1);
 			}
 			len++;
@@ -62,8 +62,8 @@ static ssize_t	philo_noplen(char *str, t_input *input)
 	}
 	if (len > 20)
 	{
-		input->is_valid = 0;
-		input->badnop = BADNOP;
+		i->is_valid = 0;
+		i->badnotepme = BADNOTEPME;
 		return (-1);
 	}
 	return (len);
@@ -71,8 +71,8 @@ static ssize_t	philo_noplen(char *str, t_input *input)
 
 static int	philo_is_integer(char *str1, char *str2, t_input *input)
 {
-	size_t	i;
-	size_t	j;
+	ssize_t	i;
+	ssize_t	j;
 	int		all_equal;
 
 	i = 0;
@@ -125,22 +125,14 @@ static uint64_t	philo_atolui(char *str, ssize_t len)
 	return (result);
 }
 
-void	philo_number_of_philosophers(char *str, t_input *input)
+void	philo_number_of_times_each_philosopher_must_eat(char *str, t_input *i)
 {
 	ssize_t	len;
 
-	len = philo_noplen(str, input);
-	if ((len < 0) || ((len == 20) && !philo_is_integer(str, AINT64MAX, input)))
+	len = philo_notepmelen(str, i);
+	if ((len < 0) || ((len == 20) && !philo_is_integer(str, AINT64MAX, i)))
 		return ;
-	input->number_of_philosophers = philo_atolui(str, len);
-	if (input->number_of_philosophers < 4)
-		input->is_special = 1;
-	if (input->number_of_philosophers > MAXPHILOS)
-	{
-		input->is_valid = 0;
-		input->badthreads = BADTHREADS;
-		return ;
-	}
-	if ((input->number_of_philosophers % 2) == 0)
-		input->is_even = 1;
+	i->number_of_times_each_philosopher_must_eat = philo_atolui(str, len);
+	if (i->number_of_times_each_philosopher_must_eat == 0)
+		i->is_special = 1;
 }
