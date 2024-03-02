@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 13:39:29 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:28:01 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 14:30:58 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -135,4 +135,5 @@ void	philo_number_of_times_each_philosopher_must_eat(char *str, t_input *i)
 	i->number_of_times_each_philosopher_must_eat = philo_atolui(str, len);
 	if (i->number_of_times_each_philosopher_must_eat == 0)
 		i->is_special = 1;
+	i->is_limited = 1;
 }

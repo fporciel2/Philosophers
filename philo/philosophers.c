@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 13:55:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 14:31:16 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -101,6 +101,7 @@ int	main(int argc, char **argv)
 	printf("Is Valid: %d\n", input.is_valid);
 	printf("Is Special: %d\n", input.is_special);
 	printf("Is Even: %d\n", input.is_even);
+	printf("Is Limited: %d\n", input.is_limited);
 	printf("-%s\n-%s\n-%s\n-%s\n-%s\n-%s\n", input.badnop, input.badthreads,
 		input.badttd, input.badtte, input.badtts, input.badnotepme);
 	return (0);
