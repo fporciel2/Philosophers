@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 14:34:40 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:59:41 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:04:41 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -52,7 +52,7 @@ int	philo_input_is_not_valid(t_input *input)
 			printf("\n* Wrong time to sleep; %s\n", input->badtts);
 		if (input->badnotepme)
 			printf("\n* Wrong number of times each philosopher must eat; %s\n",
-					input->badnotepme);
+				input->badnotepme);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:57:10 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:05:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -121,10 +121,10 @@ int		philo_special_execution(t_gdata *global_data);
 int		philo_init_local(t_local *local, t_gdata *global_data);
 void	philo_limited_even(pthread_t *odd, pthread_t *even, t_local *local);
 void	philo_limited_odd(pthread_t *odd, pthread_t *even,
-		pthread_t *last_three, t_local *local);
+			pthread_t *last_three, t_local *local);
 void	philo_unlimited_even(pthread_t *odd, pthread_t *even, t_local *local);
 void	philo_unlimited_odd(pthread_t *odd, pthread_t *even,
-		pthread_t *last_three, t_local *local);
+			pthread_t *last_three, t_local *local);
 int		philo_is_over(int is_over);
 
 #endif

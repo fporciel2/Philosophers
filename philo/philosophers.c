@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:45:11 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:03:55 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -59,7 +59,7 @@
 	}
 	return (1);
 }
-
+*/
 static int	philo_initialize(t_input *input, t_gdata *global_data)
 {
 	philo_init_global_data(global_data);
@@ -75,11 +75,11 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 		return (philo_special_execution(global_data));
 	return (philo_normal_execution(input, global_data));
 }
-*/
+
 int	main(int argc, char **argv)
 {
 	t_input	input;
-	//t_gdata	global_data;
+	t_gdata	global_data;
 
 	argc--;
 	argv++;
@@ -94,8 +94,5 @@ int	main(int argc, char **argv)
 		philo_number_of_times_each_philosopher_must_eat(argv[4], &input);
 	if (!input.is_valid)
 		return (philo_input_is_not_valid(&input));
-	return (0);
+	return (philo_initialize(&input, &global_data));
 }
-/*
-	return (philo_initialize(&input, &global_data);
-}*/
