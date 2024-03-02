@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/01 13:03:35 by fporciel          #+#    #+#              #
-#    Updated: 2024/03/01 15:45:27 by fporciel         ###   ########.fr        #
+#    Updated: 2024/03/02 16:37:23 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -41,8 +41,6 @@ MAIN := philosophers.c
 HEADER := philo.h
 SRCS := $(filter-out $(MAIN), $(wildcard philo*.c))
 OBJS := $(patsubst %.c, %.o, $(SRCS))
-AOBJS := $(patsubst %.c, %.a, $(SRCS))
-TOBJS := $(patsubst %.c, %.t, $(SRCS))
 MAXTHREADS := $(shell cat /proc/sys/kernel/threads-max)
 MAXPHILOS := $(shell expr $(MAXTHREADS) - 3)
 CC := gcc
@@ -67,21 +65,13 @@ $(OBJS): $(SRCS)
 	@$(CC) $(CSTD) $(CFLAGS) $(COPT) $(INCLUDE) $(DMAXPHILOS) \
 		$(HEADER) $(SRCS) -c
 
-memtest: $(AOBJS)
-	@$(CC) $(CSTD) $(CFLAGS) $(COPT) $(INCLUDE) $(DMAXPHILOS) $(AFLAGS) \
+memtest: $(OBJS)
+	@$(CC) $(CSTD) $(CFLAGS) $(INCLUDE) $(DMAXPHILOS) $(AFLAGS) \
 		$(HEADER) $(MAIN) $(AOBJS) $(LFLAGS) $(LAFLAGS) -o $(NAME)
 
-$(AOBJS): $(SRCS)
-	@$(CC) $(CSTD) $(CFLAGS) $(COPT) $(INCLUDE) $(DMAXPHILOS) $(AFLAGS) \
-		$(HEADER) $(SRCS) -c
-
-threadtest: $(TOBJS)
-	@$(CC) $(CSTD) $(CFLAGS) $(COPT) $(INCLUDE) $(DMAXPHILOS) $(TFLAGS) \
+threadtest: $(OBJS)
+	@$(CC) $(CSTD) $(CFLAGS) $(INCLUDE) $(DMAXPHILOS) $(TFLAGS) \
 		$(HEADER) $(MAIN) $(TOBJS) $(LFLAGS) $(LTFLAGS) -o $(NAME)
-
-$(TOBJS): $(SRCS)
-	@$(CC) $(CSTD) $(CFLAGS) $(COPT) $(INCLUDE) $(DMAXPHILOS) $(TFLAGS) \
-		$(HEADER) $(SRCS) -c
 
 clean:
 	@rm -f $(OBJS) $(AOBJS) $(TOBJS)
