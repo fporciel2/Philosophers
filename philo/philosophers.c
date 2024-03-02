@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 15:03:55 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:57:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -62,19 +62,25 @@
 */
 static int	philo_initialize(t_input *input, t_gdata *global_data)
 {
-	philo_init_global_data(global_data);
-	if (!philo_init_philosophers(input, global_data)
-		|| !philo_init_forks(global_data)
-		|| !philo_init_mutexes(global_data)
-		|| !philo_init_timestamps(global_data))
-		return (0);
-	philo_globalize_times(input, global_data);
-	if (input->is_limited)
-		philo_set_iterations(input, global_data);
 	if (input->is_special)
-		return (philo_special_execution(global_data));
-	return (philo_normal_execution(input, global_data));
+		return (philo_special_execution(input, global_data));
+	return (0);
 }
+/*
+	if (input->is_limited)
+		philo_set_iterations(input->number_of_times_each_philosopher_must_eat,
+				&global_data->number_of_times_each_philosopher_must_eat);
+	philo_init_global_data(input, global_data);
+	if (!philo_init_timestamps(input, global_data)
+		|| !philo_init_mutexes(input, global_data)
+		|| !philo_init_forks(input, global_data)
+		|| !philo_init_philosophers(input, global_data))
+		return (philo_memory_error(global_data));
+	if (!input->is_even)
+		if (!philo_split_philosophers(global_data))
+			return (philo_memory_split_error(global_data));
+	return (philo_normal_execution(input, global_data));
+}*/
 
 int	main(int argc, char **argv)
 {

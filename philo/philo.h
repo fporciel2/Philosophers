@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 15:05:15 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:58:09 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -92,8 +92,20 @@ typedef struct s_input
 
 typedef struct s_gdata
 {
-	int	is_over;
-}		t_gdata;
+	uint64_t	number_of_philosophers;
+	useconds_t	time_to_die;
+	useconds_t	time_to_eat;
+	useconds_t	time_to_sleep;
+	uint64_t	number_of_times_each_philosopher_must_eat;
+	int			is_over;
+	t_philo		*odd_philosophers;
+	t_philo		*even_philosophers;
+	t_philo		*last_three_philosophers;
+	t_philo		*philosophers;
+	t_fork		*forks;
+	t_mutex		*mutexes;
+	t_timestamp	*timestamps;
+}				t_gdata;
 
 typedef struct s_local
 {
@@ -109,14 +121,16 @@ void	philo_init_time(char *argv, t_input *input, int param);
 void	philo_number_of_times_each_philosopher_must_eat(char *argv, t_input *i);
 int		philo_input_is_not_valid(t_input *input);
 /* Initialization functions. */
-void	philo_init_global_data(t_gdata *global_data);
+int		philo_special_execution(t_input *input, t_gdata *global_data);
+void	philo_set_iterations(uint64_t num, uint64_t *iterations);
+void	philo_init_global_data(t_input *input, t_gdata *global_data);
 int		philo_init_philosophers(t_input *input, t_gdata *global_data);
-int		philo_init_forks(t_gdata *global_data);
-int		philo_init_mutexes(t_gdata *global_data);
-int		philo_init_timestamps(t_gdata *global_data);
-void	philo_globalize_times(t_input *input, t_gdata *global_data);
-void	philo_set_iterations(t_input *input, t_gdata *global_data);
-int		philo_special_execution(t_gdata *global_data);
+int		philo_init_mutexes(t_input *input, t_gdata *global_data);
+int		philo_init_forks(t_input *input, t_gdata *global_data);
+int		philo_init_timestamps(t_input *input, t_gdata *global_data);
+int		philo_memory_error(t_gdata *global_data);
+int		philo_memory_split_error(t_gdata *global_data);
+void	philo_split_philosophers(t_gdata *global_data);
 /* Routine selection's functions.*/
 int		philo_init_local(t_local *local, t_gdata *global_data);
 void	philo_limited_even(pthread_t *odd, pthread_t *even, t_local *local);
