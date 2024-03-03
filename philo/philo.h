@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/03 13:49:45 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/03 15:27:01 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -93,10 +93,6 @@ typedef struct s_input
 typedef struct s_philo
 {
 	pthread_t		philosopher;
-	int				is_dead;
-	int				is_eating;
-	int				is_sleeping;
-	int				is_thinking;
 	uint64_t		id;
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
@@ -179,14 +175,5 @@ int			philo_is_over(int is_over);
 /* philo_special_execution subroutines.*/
 void		*philo_one_routine(void *data);
 uint64_t	philo_timestamp(void);
-/* philo_special_execution / philo_two subroutines.*/
-int			philo_two_create_timers(int is_limited, t_gdata *global_data);
-/* philo_two_create_timers subroutines.*/
-int			philo_two_create_timers_error(t_gdata *global_data);
-void		*philo_limit_two_odd_routine(void *philo);
-void		*philo_limit_two_even_routine(void *philo);
-void		*philo_two_odd_routine(void *philo);
-void		*philo_two_even_routine(void *philo);
-int			philo_clean_global_data_two(t_gdata *data);
 
 #endif
