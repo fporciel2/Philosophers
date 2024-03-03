@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 15:41:48 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/03 15:23:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/03 16:04:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -41,6 +41,27 @@
  */
 
 #include "philo.h"
+
+static int	philo_two(t_input *input, t_gdata *global_data)
+{
+	t_philo		*philosophers;
+	t_fork		*forks;
+	t_timestamp	*timestamps;
+	t_mutex		*mutex;
+
+	philosophers = (t_philo *)malloc(sizeof(t_philo) * 2);
+	forks = (t_fork *)malloc(sizeof(t_fork) * 2);
+	timestamps = (t_timestamp *)malloc(sizeof(t_timestamp) * 2);
+	mutex = (t_mutex *)malloc(sizeof(t_mutex));
+	if (!forks || !philosophers || !timestamps || !mutex)
+		return (philo_free_two(philosophers, forks, timestamps, mutex));
+	philo_init_two_global_data(global_data, input);
+	philo_init_two_forks(global_data, forks);
+	philo_init_two_timestamps(global_data, timestamps);
+	philo_init_two_mutexes(global_data, mutex);
+	philo_init_two_philosophers(global_data, philosophers);
+	return (philo_two_routine(global_data));
+}
 
 static int	philo_one(t_input *input, t_gdata *global_data)
 {
