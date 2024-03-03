@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 15:41:48 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 16:24:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/03 13:06:42 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -42,12 +42,28 @@
 
 #include "philo.h"
 
+static int	philo_two(t_input *input, t_gdata *global_data)
+{
+	global_data->number_of_philosophers = input->number_of_philosophers;
+	global_data->number_of_times_each_philosopher_must_eat =
+		input->number_of_times_each_philosopher_must_eat;
+	global_data->time_to_die = input->time_to_die;
+	global_data->time_to_eat = input->time_to_eat;
+	global_data->time_to_sleep = input->time_to_sleep;
+	global_data->odd_philosophers = NULL;
+	global_data->even_philosophers = NULL;
+	global_data->forks = NULL;
+	global_data->mutexes = NULL;
+	global_data->timestamps = NULL;
+	global_data->is_over = 0;
+	return (philo_two_create_timers(input->is_limited, global_data));
+}
+
 static int	philo_one(t_input *input, t_gdata *global_data)
 {
 	pthread_t		philosopher;
 	pthread_mutex_t	fork;
 
-	printf("Reached philo_one.\n");
 	pthread_mutex_init(&fork, NULL);
 	global_data->forks = &fork;
 	global_data->time_to_die = input->time_to_die;
@@ -59,16 +75,15 @@ static int	philo_one(t_input *input, t_gdata *global_data)
 
 int	philo_special_execution(t_input *input, t_gdata *global_data)
 {
-	printf("Reached special execution.\n");
 	if ((input->number_of_philosophers == 0)
 		|| ((input->is_limited)
 			&& (input->number_of_times_each_philosopher_must_eat == 0)))
 		return (1);
 	else if (input->number_of_philosophers == 1)
-		return (philo_one(input, global_data));/*
+		return (philo_one(input, global_data));
 	else if (input->number_of_philosophers == 2)
-		return (philo_two(input, global_data));
+		return (philo_two(input, global_data));/*
 	else if (input->number_of_philosophers == 3)
 		return (philo_three(input, global_data));*/
-	return (0);
+	return ((int)write(2, "WTF??!!!??\n", 11));
 }

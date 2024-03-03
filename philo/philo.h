@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 16:19:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/03 13:49:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -90,6 +90,46 @@ typedef struct s_input
 	char		*badnotepme;
 }				t_input;
 
+typedef struct s_philo
+{
+	pthread_t		philosopher;
+	int				is_dead;
+	int				is_eating;
+	int				is_sleeping;
+	int				is_thinking;
+	uint64_t		id;
+	uint64_t		time_to_die;
+	uint64_t		time_to_eat;
+	uint64_t		time_to_sleep;
+	uint64_t		number_of_meals;
+	uint64_t		*last_meal;
+	int				*is_over;
+	pthread_mutex_t	*stdout_mutex;
+	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*timestamp;
+	pthread_mutex_t	*is_over_mutex;
+}					t_philo;
+
+typedef struct s_fork
+{
+	pthread_mutex_t	fork;
+	uint64_t		id;
+}					t_fork;
+
+typedef struct s_timestamp
+{
+	uint64_t		timestamp;
+	pthread_mutex_t	timestamp_mutex;
+	uint64_t		id;
+}					t_timestamp;
+
+typedef struct s_mutex
+{
+	pthread_mutex_t	is_over_mutex;
+	pthread_mutex_t	stdout_mutex;
+}					t_mutex;
+
 typedef struct s_gdata
 {
 	uint64_t	number_of_philosophers;
@@ -97,23 +137,15 @@ typedef struct s_gdata
 	useconds_t	time_to_eat;
 	useconds_t	time_to_sleep;
 	uint64_t	number_of_times_each_philosopher_must_eat;
-	int			is_over;/*
+	int			is_over;
 	t_philo		*odd_philosophers;
 	t_philo		*even_philosophers;
 	t_philo		*last_three_philosophers;
 	t_philo		*philosophers;
 	t_fork		*forks;
 	t_mutex		*mutexes;
-	t_timestamp	*timestamps;*/
-	pthread_mutex_t	*forks;
+	t_timestamp	*timestamps;
 }				t_gdata;
-
-typedef struct s_local
-{
-	pthread_t	*odd;
-	pthread_t	*even;
-	pthread_t	*last_three;
-}				t_local;
 
 /* Parsing functions.*/
 void		philo_init_input(t_input *input);
@@ -147,5 +179,14 @@ int			philo_is_over(int is_over);
 /* philo_special_execution subroutines.*/
 void		*philo_one_routine(void *data);
 uint64_t	philo_timestamp(void);
+/* philo_special_execution / philo_two subroutines.*/
+int			philo_two_create_timers(int is_limited, t_gdata *global_data);
+/* philo_two_create_timers subroutines.*/
+int			philo_two_create_timers_error(t_gdata *global_data);
+void		*philo_limit_two_odd_routine(void *philo);
+void		*philo_limit_two_even_routine(void *philo);
+void		*philo_two_odd_routine(void *philo);
+void		*philo_two_even_routine(void *philo);
+int			philo_clean_global_data_two(t_gdata *data);
 
 #endif
