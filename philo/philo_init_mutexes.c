@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_init_timestamps.c                            :+:      :+:    :+:   */
+/*   philo_init_mutexes.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/04 13:57:07 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 14:24:33 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/04 14:25:58 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/04 14:32:46 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,27 +30,19 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program initializes the array of timestamps.
+ * This part of the program initializes two mutexes: one to lock the access to
+ * the standard output stream, one to lock the access to the 'is_over' flag.
  */
 
 #include "philo.h"
 
-int	philo_init_timestamps(t_input *input, t_gdata *data)
+int	philo_init_mutexes(t_input *input, t_gdata *data)
 {
-	uint64_t	i;
-
-	data->timestamps = (t_timestamp *)malloc(sizeof(t_timestamp)
-			* (input->number_of_philosophers + 1));
-	if (!data->timestamps)
+	(void)input;
+	data->mutexes = (t_mutex *)malloc(sizeof(t_mutex));
+	if (!data->mutexes)
 		return (0);
-	i = 0;
-	while (i < input->number_of_philosophers)
-	{
-		data->timestamps[i].timestamp = 0;
-		data->timestamps[i].id = i + 1;
-		pthread_mutex_init(&data->timestamps[i].timestamp_mutex, NULL);
-		i++;
-	}
-	data->timestamps[i].id = 0;
+	pthread_mutex_init(&data->mutexes->stdout_mutex, NULL);
+	pthread_mutex_init(&data->mutexes->is_over_mutex, NULL);
 	return (1);
 }
