@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_special_execution.c                          :+:      :+:    :+:   */
+/*   philo_set_iterations.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/02 15:41:48 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:07:33 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/04 13:03:22 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/04 13:04:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -29,40 +29,11 @@
  * For more information on how to contact me by electronic and paper mail
  * please see:
  * https://github.com/fporciel2/Philosophers
- *
- * This part of the program gives the special execution codepath, i.e. the code
- * that is executed in case the input has strange parameters. Strange cases:
- *
- * - The number of philosophers is 0.
- * - The number of times the simulation has to be executed is 0.
- * - The number of philosophers is 1.
- * - The number of philosophers is 2.
- * - The number of philosophers is 3.
  */
 
 #include "philo.h"
 
-static int	philo_one(t_input *input, t_gdata *global_data)
+void	philo_set_iterations(uint64_t num, uint64_t *iterations)
 {
-	pthread_t		philosopher;
-	pthread_mutex_t	fork;
-
-	pthread_mutex_init(&fork, NULL);
-	global_data->fork = &fork;
-	global_data->time_to_die = input->time_to_die;
-	pthread_create(&philosopher, NULL, philo_one_routine, (void *)global_data);
-	pthread_join(philosopher, NULL);
-	pthread_mutex_destroy(&fork);
-	return (0);
-}
-
-int	philo_special_execution(t_input *input, t_gdata *global_data)
-{
-	if ((input->number_of_philosophers == 0)
-		|| ((input->is_limited)
-			&& (input->number_of_times_each_philosopher_must_eat == 0)))
-		return (1);
-	else if (input->number_of_philosophers == 1)
-		return (philo_one(input, global_data));
-	return (0);
+	*iterations = num;
 }

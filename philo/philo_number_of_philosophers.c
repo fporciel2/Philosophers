@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 14:15:26 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 14:22:28 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:00:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -133,7 +133,7 @@ void	philo_number_of_philosophers(char *str, t_input *input)
 	if ((len < 0) || ((len == 20) && !philo_is_integer(str, AINT64MAX, input)))
 		return ;
 	input->number_of_philosophers = philo_atolui(str, len);
-	if (input->number_of_philosophers < 4)
+	if (input->number_of_philosophers < 2)
 		input->is_special = 1;
 	if (input->number_of_philosophers > MAXPHILOS)
 	{

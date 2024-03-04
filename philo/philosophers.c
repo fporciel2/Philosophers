@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/02 15:57:45 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:12:52 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -35,42 +35,16 @@
 
 #include "philo.h"
 
-/*static int	philo_normal_execution(t_input *input, t_gdata *global_data)
-{
-	pthread_t	odd;
-	pthread_t	even;
-	pthread_t	last_three;
-	t_local		*local;
-
-	if (!philo_init_local(local, global_data))
-		return (0);
-	if (input->is_limited && input->is_even)
-		philo_limited_even(&odd, &even, local);
-	else if (input->is_limited && !input->is_even)
-		philo_limited_odd(&odd, &even, &last_three, local);
-	else if (!input->is_limited && input->is_even)
-		philo_unlimited_even(&odd, &even, local);
-	else
-		philo_unlimited_odd(&odd, &even, &last_three, local);
-	while (1)
-	{
-		if (philo_is_over(global_data->is_over))
-			return (1);
-	}
-	return (1);
-}
-*/
 static int	philo_initialize(t_input *input, t_gdata *global_data)
 {
 	if (input->is_special)
 		return (philo_special_execution(input, global_data));
-	return (0);
-}
-/*
 	if (input->is_limited)
 		philo_set_iterations(input->number_of_times_each_philosopher_must_eat,
 				&global_data->number_of_times_each_philosopher_must_eat);
 	philo_init_global_data(input, global_data);
+	return (0);
+}/*
 	if (!philo_init_timestamps(input, global_data)
 		|| !philo_init_mutexes(input, global_data)
 		|| !philo_init_forks(input, global_data)
