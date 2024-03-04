@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 14:42:07 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:34:44 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -48,34 +48,8 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 			|| !philo_init_forks(input, global_data)
 			|| !philo_init_philosophers(input, global_data))
 		return (philo_cleanup(global_data));
-	printf("Initialized global data\n");
-	printf("number_of_philosophers: %lu\n",
-			global_data->number_of_philosophers);
-	printf("time_to_die: %u\n", global_data->time_to_die);
-	printf("time_to_eat: %u\n", global_data->time_to_eat);
-	printf("time_to_sleep: %u\n", global_data->time_to_sleep);
-	printf("number_of_times_each_philosopher_must_eat: %lu\n",
-		global_data->number_of_meals);
-	printf("is_over: %d\n", global_data->is_over);
-	printf("is_limited: %d\n", input->is_limited);
-	printf("is_valid: %d\n", input->is_valid);
-	printf("timestamp: %lu\n", philo_timestamp());
-	printf("mutexes: %p\n", (void *)global_data->mutexes);
-	printf("forks: %p\n", (void *)global_data->forks);
-	printf("philosophers: %p\n", (void *)global_data->philosophers);
-	printf("timestamps: %p\n", (void *)global_data->timestamps);
-	return (philo_cleanup(global_data));
-}/*
-	if (!philo_init_timestamps(input, global_data)
-		|| !philo_init_mutexes(input, global_data)
-		|| !philo_init_forks(input, global_data)
-		|| !philo_init_philosophers(input, global_data))
-		return (philo_memory_error(global_data));
-	if (!input->is_even)
-		if (!philo_split_philosophers(global_data))
-			return (philo_memory_split_error(global_data));
-	return (philo_normal_execution(input, global_data));
-}*/
+	return (philo_normal_execution(global_data));
+}
 
 int	main(int argc, char **argv)
 {
