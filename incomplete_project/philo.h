@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 10:07:55 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 12:01:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -185,5 +185,13 @@ void		philo_init_two_mutexes(t_gdata *global_data, t_mutex *mutexes);
 void		philo_init_two_philosophers(t_gdata *global_data,
 				t_philo *philosophers);
 int			philo_two_routine(t_gdata *global_data);
+/* philo_two_routine subroutines. */
+int			philo_will_eat(t_gdata *data, t_philo *philosopher);
+int			philo_will_sleep(t_gdata *data, t_philo *philosopher);
+int			philo_kill_em_all(t_gdata *data, t_philo *philosopher);
+void		*philo_odd_eat(void *philosopher);
+void		*philo_even_eat(void *philosopher);
+void		*philo_odd_sleep(void *philosopher);
+void		*philo_even_sleep(void *philosopher);
 
 #endif

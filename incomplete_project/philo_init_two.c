@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 10:08:11 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 10:21:56 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 11:56:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -64,6 +64,8 @@ void	philo_init_two_timestamps(t_gdata *data, t_timestamp *timestamps)
 	data->timestamps[2].id = 0;
 	pthread_mutex_init(&data->timestamps[0].timestamp_mutex, NULL);
 	pthread_mutex_init(&data->timestamps[1].timestamp_mutex, NULL);
+	data->timestamps[0].timestamp = 0;
+	data->timestamps[1].timestamp = 0;
 }
 
 void	philo_init_two_mutexes(t_gdata *data, t_mutex *mutexes)
