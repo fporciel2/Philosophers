@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/03 16:05:10 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:07:55 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -178,6 +178,12 @@ uint64_t	philo_timestamp(void);
 int			philo_free_two(t_philo *philosophers, t_fork *forks,
 				t_timestamp *timestamps, t_mutex *mutexes);
 void		philo_init_two_global_data(t_gdata *global_data, t_input *input);
-void		philo_init_two_forks(
+void		philo_init_two_forks(t_gdata *global_data, t_fork *forks);
+void		philo_init_two_timestamps(t_gdata *global_data,
+				t_timestamp *timestamps);
+void		philo_init_two_mutexes(t_gdata *global_data, t_mutex *mutexes);
+void		philo_init_two_philosophers(t_gdata *global_data,
+				t_philo *philosophers);
+int			philo_two_routine(t_gdata *global_data);
 
 #endif

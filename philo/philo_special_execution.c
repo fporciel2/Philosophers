@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/02 15:41:48 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/03 16:04:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 10:23:42 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -60,6 +60,10 @@ static int	philo_two(t_input *input, t_gdata *global_data)
 	philo_init_two_timestamps(global_data, timestamps);
 	philo_init_two_mutexes(global_data, mutex);
 	philo_init_two_philosophers(global_data, philosophers);
+	global_data->odd_philosophers->right_fork = &forks[0].fork;
+	global_data->odd_philosophers->left_fork = &forks[1].fork;
+	global_data->even_philosophers->right_fork = &forks[0].fork;
+	global_data->even_philosophers->left_fork = &forks[1].fork;
 	return (philo_two_routine(global_data));
 }
 
