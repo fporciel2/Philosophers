@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:34:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:42:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -156,9 +156,7 @@ int			philo_init_philosophers(t_input *input, t_gdata *global_data);
 int			philo_init_mutexes(t_input *input, t_gdata *global_data);
 int			philo_init_forks(t_input *input, t_gdata *global_data);
 int			philo_init_timestamps(t_input *input, t_gdata *global_data);
-int			philo_memory_error(t_gdata *global_data);
-int			philo_memory_split_error(t_gdata *global_data);
-void		philo_split_philosophers(t_gdata *global_data);
+int			philo_cleanup(t_gdata *global_data);
 /* philo_special_execution subroutines.*/
 void		*philo_one_routine(void *data);
 uint64_t	philo_timestamp(void);

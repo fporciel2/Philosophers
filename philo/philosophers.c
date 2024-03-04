@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:36:36 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:40:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,6 +43,8 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 		philo_set_iterations(input->number_of_times_each_philosopher_must_eat,
 			&global_data->number_of_meals);
 	philo_init_global_data(input, global_data);
+	if (!philo_init_timestamps(input, global_data))
+		return (0);
 	printf("Initialized global data\n");
 	printf("number_of_philosophers: %lu\n",
 			global_data->number_of_philosophers);
@@ -59,7 +61,7 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 	printf("forks: %p\n", (void *)global_data->forks);
 	printf("philosophers: %p\n", (void *)global_data->philosophers);
 	printf("timestamps: %p\n", (void *)global_data->timestamps);
-	return (0);
+	return (philo_cleanup(global_data));
 }/*
 	if (!philo_init_timestamps(input, global_data)
 		|| !philo_init_mutexes(input, global_data)
