@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:42:18 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:54:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -100,9 +100,11 @@ typedef struct s_philo
 	uint64_t		number_of_meals;
 	uint64_t		*last_meal;
 	int				*is_over;
+	int				flag;
 	pthread_mutex_t	*stdout_mutex;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*third_fork;
 	pthread_mutex_t	*timestamp;
 	pthread_mutex_t	*is_over_mutex;
 }					t_philo;
