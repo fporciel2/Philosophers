@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 16:36:54 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:39:36 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -34,6 +34,10 @@
  */
 
 #include "philo.h"
+
+static int	philo_normal_execution(t_gdata *data)
+{
+}
 
 static int	philo_initialize(t_input *input, t_gdata *global_data)
 {
