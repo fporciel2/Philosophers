@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:20:46 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:34:30 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -132,7 +132,7 @@ typedef struct s_gdata
 	useconds_t		time_to_die;
 	useconds_t		time_to_eat;
 	useconds_t		time_to_sleep;
-	uint64_t		number_of_times_each_philosopher_must_eat;
+	uint64_t		number_of_meals;
 	int				is_over;
 	t_philo			*philosophers;
 	t_fork			*forks;

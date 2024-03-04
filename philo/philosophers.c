@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 13:12:52 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:36:36 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -41,8 +41,24 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 		return (philo_special_execution(input, global_data));
 	if (input->is_limited)
 		philo_set_iterations(input->number_of_times_each_philosopher_must_eat,
-				&global_data->number_of_times_each_philosopher_must_eat);
+			&global_data->number_of_meals);
 	philo_init_global_data(input, global_data);
+	printf("Initialized global data\n");
+	printf("number_of_philosophers: %lu\n",
+			global_data->number_of_philosophers);
+	printf("time_to_die: %u\n", global_data->time_to_die);
+	printf("time_to_eat: %u\n", global_data->time_to_eat);
+	printf("time_to_sleep: %u\n", global_data->time_to_sleep);
+	printf("number_of_times_each_philosopher_must_eat: %lu\n",
+		global_data->number_of_meals);
+	printf("is_over: %d\n", global_data->is_over);
+	printf("is_limited: %d\n", input->is_limited);
+	printf("is_valid: %d\n", input->is_valid);
+	printf("timestamp: %lu\n", philo_timestamp());
+	printf("mutexes: %p\n", (void *)global_data->mutexes);
+	printf("forks: %p\n", (void *)global_data->forks);
+	printf("philosophers: %p\n", (void *)global_data->philosophers);
+	printf("timestamps: %p\n", (void *)global_data->timestamps);
 	return (0);
 }/*
 	if (!philo_init_timestamps(input, global_data)
