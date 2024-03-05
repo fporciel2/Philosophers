@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:23:36 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:26:39 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -37,13 +37,51 @@
 
 #include "philo.h"
 
+static void	philo_sleep(t_philo *philo)
+{
+	pthread_mutex_lock(philo->stdout_mutex);
+	printf("%lu is sleeping: %lu\n", philo->id, philo->number_of_meals);
+	pthread_mutex_unlock(philo->stdout_mutex);
+}
+
+static void	philo_eat(t_philo *philo)
+{
+	pthread_mutex_lock(philo->stdout_mutex);
+	printf("%lu is eating: %lu\n", philo->id, philo->number_of_meals);
+	pthread_mutex_unlock(philo->stdout_mutex);
+}
+
+static void	*philo_limited_routine(t_philo *philo)
+{
+	while (philo->number_of_meals)
+	{
+		philo_eat(philo);
+		philo_sleep(philo);
+		philo->number_of_meals--;
+	}
+	return (NULL);
+}
+
+static void	*philo_unlimited_routine(t_philo *philo)
+{
+	while (1)
+	{
+		philo_eat(philo);
+		philo_sleep(philo);
+	}
+	return (NULL);
+}
+
 void	*philo_routine(void *philosopher)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)philosopher;
 	pthread_mutex_lock(philo->is_over_mutex);
-	printf("%lu Philosopher correctly initialized\n", philo->id);
 	pthread_mutex_unlock(philo->is_over_mutex);
+	if (philo->number_of_meals == 0)
+		return (philo_unlimited_routine(philo));
+	else
+		return (philo_limited_routine(philo));
 	return (NULL);
 }
