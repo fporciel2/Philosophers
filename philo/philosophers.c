@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:52:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:00:46 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -50,7 +50,7 @@ static void	philo_join_routines(t_gdata *data)
 static void	philo_execute_routine(t_gdata *data, uint64_t *i)
 {
 	pthread_create(&data->threads[*i], NULL,
-			philo_routine, &data->philosophers[*i]);
+		philo_routine, &data->philosophers[*i]);
 	(*i)++;
 }
 
@@ -71,7 +71,7 @@ static int	philo_normal_execution(t_gdata *data)
 		while (data->philosophers[i].id != data->number_of_philosophers)
 			philo_execute_routine(data, &i);
 		pthread_create(&data->threads[i], NULL,
-				philo_last_routine, &data->philosophers[i]);
+			philo_last_routine, &data->philosophers[i]);
 	}
 	pthread_mutex_unlock(&data->mutexes->is_over_mutex);
 	philo_join_routines(data);
