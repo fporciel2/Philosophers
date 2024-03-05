@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:14:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:44:50 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -39,13 +39,17 @@ static void	philo_join_routines(t_gdata *data)
 {
 	uint64_t	i;
 
-	i = 0;
-	while (data->philosophers[i].id != 0)
-		pthread_join(data->philosophers[i++].philosopher, NULL);
+	i = 1;
+	while (i <= data->number_of_philosophers)
+	{
+		pthread_join(data->threads[i - 1], NULL);
+		i++;
+	}
 }
 
 static void	philo_execute_routine(t_gdata *data, uint64_t *i)
 {
+	data->threads[*i] = data->philosophers[*i].philosopher;
 	pthread_create(&data->philosophers[*i].philosopher, NULL,
 			philo_routine, &data->philosophers[*i]);
 	(*i)++;
@@ -65,8 +69,9 @@ static int	philo_normal_execution(t_gdata *data)
 	else
 	{
 		pthread_mutex_lock(&data->mutexes->is_over_mutex);
-		while (i < data->number_of_philosophers)
+		while (data->philosophers[i].id != data->number_of_philosophers)
 			philo_execute_routine(data, &i);
+		data->threads[i] = data->philosophers[i].philosopher;
 		pthread_create(&data->philosophers[i].philosopher, NULL,
 				philo_last_routine, &data->philosophers[i]);
 	}
@@ -77,6 +82,7 @@ static int	philo_normal_execution(t_gdata *data)
 
 static int	philo_initialize(t_input *input, t_gdata *global_data)
 {
+	global_data->threads = NULL;
 	if (input->is_special)
 		return (philo_special_execution(input, global_data));
 	if (input->is_limited)
@@ -87,6 +93,10 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 		|| !philo_init_mutexes(input, global_data)
 		|| !philo_init_forks(input, global_data)
 		|| !philo_init_philosophers(input, global_data))
+		return (philo_cleanup(global_data));
+	global_data->threads = (pthread_t *)malloc(sizeof(pthread_t)
+			* global_data->number_of_philosophers);
+	if (global_data->threads == NULL)
 		return (philo_cleanup(global_data));
 	return (philo_normal_execution(global_data));
 }

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:18:17 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:36:08 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -137,6 +137,7 @@ typedef struct s_gdata
 	uint64_t		number_of_meals;
 	int				is_over;
 	t_philo			*philosophers;
+	pthread_t		*threads;
 	t_fork			*forks;
 	pthread_mutex_t	*fork;
 	t_mutex			*mutexes;
