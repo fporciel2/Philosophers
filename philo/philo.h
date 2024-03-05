@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:55:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:05:03 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -92,6 +92,7 @@ typedef struct s_input
 
 typedef struct s_philo
 {
+	uint64_t		number_of_philosophers;
 	uint64_t		id;
 	uint64_t		time_to_die;
 	uint64_t		time_to_eat;
