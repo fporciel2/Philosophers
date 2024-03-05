@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/04 14:54:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:18:17 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -162,5 +162,8 @@ int			philo_cleanup(t_gdata *global_data);
 /* philo_special_execution subroutines.*/
 void		*philo_one_routine(void *data);
 uint64_t	philo_timestamp(void);
+/* philo_normal_execution subroutines.*/
+void		*philo_routine(void *philosopher);
+void		*philo_last_routine(void *philosopher);
 
 #endif
