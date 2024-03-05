@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 14:46:39 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:58:49 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -40,15 +40,17 @@
 static int	philo_sleep(t_philo *philo)
 {
 	if (!philo_log_sleep(philo))
-		return (0);
-	usleep(philo->time_to_sleep);
+		return (-1);
+	return (usleep(philo->time_to_sleep * 1000));
 }
 
 static int	philo_eat(t_philo *philo)
 {
 	if (!philo_take_fork(philo, philo->right_fork)
 		|| !philo_take_fork(philo, philo->left_fork)
-		|| !philo_easily_eat(philo))
+		|| !philo_log_eat(philo)
+		|| (usleep(philo->time_to_eat * 1000) < 0)
+		|| !philo_release_forks(philo))
 		return (0);
 	return (1);
 }
@@ -57,7 +59,7 @@ static void	*philo_limited_routine(t_philo *philo)
 {
 	while (philo->number_of_meals)
 	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
+		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
 			return (NULL);
 		philo->number_of_meals--;
 	}
@@ -68,7 +70,7 @@ static void	*philo_unlimited_routine(t_philo *philo)
 {
 	while (1)
 	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
+		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
 			return (NULL);
 	}
 	return (NULL);
