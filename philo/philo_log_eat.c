@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 05:23:41 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/07 09:10:15 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:12:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -53,6 +53,7 @@ static int	philo_handle_death_before_meal(t_philo *p)
 		pthread_mutex_unlock(p->right_fork);
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->timestamp);
+		pthread_mutex_unlock(p->is_over_mutex);
 		return (0);
 	}
 	philo_wait_for_death(p);
@@ -73,7 +74,8 @@ int		philo_log_eat(t_philo *p)
 	if (philo_timestamp() >= (*p->last_meal + p->time_to_die))
 		return (philo_handle_death_before_meal(p));
 	pthread_mutex_lock(p->stdout_mutex);
-	printf("[%lu] %lu %s\n", philo_timestamp(), p->id, EAT);
+	if (philo_timestamp() < (*p->last_meal + p->time_to_die))
+		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, EAT);
 	pthread_mutex_unlock(p->stdout_mutex);
 	*p->last_meal = philo_timestamp() + p->time_to_eat;
 	pthread_mutex_unlock(p->timestamp);
