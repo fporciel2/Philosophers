@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 04:52:49 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/07 07:35:45 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/07 09:11:05 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -49,8 +49,8 @@ static void	philo_wait_for_death(t_philo *p, pthread_mutex_t *fork,
 		int param)
 {
 	if (param == 1)
-		pthread_mutex_lock(p->right_fork);
-	pthread_mutex_lock(fork);
+		pthread_mutex_unlock(p->right_fork);
+	pthread_mutex_unlock(fork);
 	while (philo_timestamp() < (*p->last_meal + p->time_to_die))
 		usleep(1000);
 }
@@ -60,18 +60,18 @@ static int	philo_handle_death_for_fork(t_philo *p, pthread_mutex_t *fork,
 {
 	uint64_t	dying_time;
 
-	pthread_mutex_unlock(p->stdout_mutex);
-	if (philo_timestamp() >= (*p->last_meal + (uint64_t)(p->time_to_die
-				* p->number_of_philosophers)))
+	pthread_mutex_unlock(p->is_over_mutex);
+	if (philo_timestamp() >= (*p->last_meal + (uint64_t)(p->time_to_die + 10)))
 		return (philo_release_resources(p, fork, param));
 	philo_wait_for_death(p, fork, param);
 	pthread_mutex_lock(p->stdout_mutex);
 	printf("[%lu] %lu %s\n", philo_timestamp(), p->id, DEAD);
-	pthread_mutex_unlock(p->timestamp);
 	dying_time = p->number_of_philosophers;
 	while (dying_time--)
 		usleep(p->time_to_die * 1000);
+	pthread_mutex_unlock(p->timestamp);
 	pthread_mutex_unlock(p->stdout_mutex);
+	pthread_mutex_unlock(p->is_over_mutex);
 	return (0);
 }
 
@@ -86,10 +86,8 @@ int	philo_take_fork(t_philo *p, pthread_mutex_t	*fork, int param)
 {
 	pthread_mutex_lock(fork);
 	pthread_mutex_lock(p->timestamp);
-	pthread_mutex_lock(p->stdout_mutex);
 	if (philo_timestamp() >= (*p->last_meal + p->time_to_die))
 		return (philo_handle_death_for_fork(p, fork, param));
-	pthread_mutex_unlock(p->stdout_mutex);
 	philo_log_take_fork(p);
 	pthread_mutex_unlock(p->timestamp);
 	return (1);
