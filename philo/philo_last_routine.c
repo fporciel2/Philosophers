@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:24:27 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:27:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/07 18:15:16 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -36,13 +36,15 @@
 
 #include "philo.h"
 
-void	*philo_last_routine(void *philosopher)
+void	philo_last_routine(t_philo *p)
 {
-	t_philo		*philo;
+	pthread_mutex_t	*tmp;
 
-	philo = (t_philo *)philosopher;
-	pthread_mutex_lock(philo->is_over_mutex);
-	printf("%lu philosopher is correctly initialized\n", philo->id);
-	pthread_mutex_unlock(philo->is_over_mutex);
-	return (NULL);
+	tmp = p->right_fork;
+	p->right_fork = p->third_fork;
+	p->third_fork = tmp;
+	pthread_mutex_lock(p->stdout_mutex);
+	printf("%lu right fork %p - left fork %p\n", p->id, (void *)p->right_fork,
+		(void *)p->left_fork);
+	pthread_mutex_unlock(p->stdout_mutex);
 }
