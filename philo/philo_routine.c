@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:37:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:46:07 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -46,32 +46,32 @@ static int	philo_sleep(t_philo *philo)
 	return (1);
 }
 
-static int	philo_eat(t_philo *philo)
+static int	philo_eat(t_philo *philo, uint64_t eat_time)
 {
 	if (!philo_take_forks(philo)
 		|| !philo_log_eat(philo)
-		|| (usleep(philo->time_to_eat * 1000) < 0)
+		|| (usleep(eat_time * 1000) < 0)
 		|| !philo_release_forks(philo))
 		return (0);
 	return (1);
 }
 
-static void	*philo_limited_routine(t_philo *philo)
+static void	*philo_limited_routine(t_philo *philo, uint64_t eat_time)
 {
 	while (philo->number_of_meals)
 	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
+		if (!philo_eat(philo, eat_time) || !philo_sleep(philo))
 			return (NULL);
 		philo->number_of_meals--;
 	}
 	return (NULL);
 }
 
-static void	*philo_unlimited_routine(t_philo *philo)
+static void	*philo_unlimited_routine(t_philo *philo, uint64_t eat_time)
 {
 	while (1)
 	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
+		if (!philo_eat(philo, eat_time) || !philo_sleep(philo))
 			return (NULL);
 	}
 	return (NULL);
@@ -79,17 +79,22 @@ static void	*philo_unlimited_routine(t_philo *philo)
 
 void	*philo_routine(void *philosopher)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	uint64_t	eat_time;
 
 	philo = (t_philo *)philosopher;
+	eat_time = philo->time_to_eat;
+	if ((philo->number_of_philosophers % 2)
+		&& (philo->id >= (philo->number_of_philosophers - 2)))
+		philo->time_to_eat *= 2;
 	pthread_mutex_lock(philo->is_over_mutex);
 	pthread_mutex_lock(philo->timestamp);
 	*philo->last_meal = philo_timestamp();
 	pthread_mutex_unlock(philo->timestamp);
 	pthread_mutex_unlock(philo->is_over_mutex);
 	if (philo->number_of_meals == 0)
-		return (philo_unlimited_routine(philo));
+		return (philo_unlimited_routine(philo, eat_time));
 	else
-		return (philo_limited_routine(philo));
+		return (philo_limited_routine(philo, eat_time));
 	return (NULL);
 }

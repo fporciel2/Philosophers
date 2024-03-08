@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_take_forks.c                                 :+:      :+:    :+:   */
+/*   philo_release_forks.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 13:41:22 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 14:33:00 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/08 14:18:24 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/08 14:35:30 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-/* 'Philosophers' is a simulation of a solution to the dining philosophers
+/* 'Philosophers'is a simulation of a solution to the dining philosophers
  * problem.
  * Copyright (C) 2024 Federico Porciello
  * 
@@ -30,28 +30,21 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program implements the cycle to obtain the forks.
+ * This part of the program handles the releasing of the forks.
  */
 
 #include "philo.h"
 
-int	philo_take_forks(t_philo *p)
+int	philo_release_forks(t_philo *p)
 {
-	pthread_mutex_lock(p->forks_mutex);
 	pthread_mutex_lock(p->timestamp);
-	if ((philo_timestamp() >= (*p->last_meal + (uint64_t)p->time_to_die))
-		|| ((philo_timestamp() + (uint64_t)p->time_to_eat) >= (*p->last_meal
-			+ (unit64)p->time_to_die)))
-		return (philo_death(p, 0));
+	if (((philo_timestamp() + (uint64_t)p->time_to_sleep)
+		>= (*p->last_meal + (uint64_t)p->time_to_die))
+		|| ((philo_timestamp() + (uint64_t)p->time_to_eat)
+			>= (*p->last_meal + (uint64_t)p->time_to_die)))
+		return (philo_death(p, 1));
 	pthread_mutex_unlock(p->timestamp);
-	pthread_mutex_lock(p->right_fork);
-	pthread_mutex_lock(p->stdout_mutex);
-	printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
-	pthread_mutex_unlock(p->stdout_mutex);
-	pthread_mutex_lock(p->left_fork);
-	pthread_mutex_lock(p->stdout_mutex);
-	printf("[%lu] %lu %s\n", philo_timestamp(), p->is, FORK);
-	pthread_mutex_unlock(p->stdout_mutex);
-	pthread_mutex_unlock(p->forks_mutex);
+	pthread_mutex_unlock(p->right_fork);
+	pthread_mutex_unlock(p->left_fork);
 	return (1);
 }

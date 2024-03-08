@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 13:51:44 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:55:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:52:22 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -33,6 +33,9 @@
  * This part of the program implements the death.
  * PARAM == 0 -----> pthread_mutex_unlock(p->forks_mutex) &&
  * pthread_mutex_unlock(p->timestamp).
+ * PARAM == 1 -----> pthread_mutex_unlock(p->right_fork) &&
+ * pthread_mutex_unlock(p->left_fork) && pthread_mutex_unlock(p->timestamp).
+ * PARAM == 2 -----> like (param == 0) but without p->forks_mutex.
  */
 
 #include "philo.h"
