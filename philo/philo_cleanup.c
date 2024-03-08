@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:41:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:42:31 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:27:53 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -61,8 +61,17 @@ static void	philo_destroy_timestamps(t_timestamp *timestamps)
 	free(timestamps);
 }
 
-static void	philo_destroy_mutexes(t_mutex *mutexes)
+static void	philo_destroy_mutexes(t_mutex *mutexes, uint64_t loop)
 {
+	uint64_t	i;
+
+	i = 0;
+	if (mutexes->forks_mutex)
+	{
+		while (i < (loop / 2))
+			pthread_mutex_destroy(&mutexes->forks_mutex[i++]);
+		free(mutexes->forks_mutex);
+	}
 	pthread_mutex_destroy(&mutexes->stdout_mutex);
 	pthread_mutex_destroy(&mutexes->is_over_mutex);
 	free(mutexes);
@@ -87,7 +96,7 @@ int	philo_cleanup(t_gdata *data)
 	if (data->timestamps)
 		philo_destroy_timestamps(data->timestamps);
 	if (data->mutexes)
-		philo_destroy_mutexes(data->mutexes);
+		philo_destroy_mutexes(data->mutexes, data->number_of_philosophers);
 	if (data->fork)
 	{
 		pthread_mutex_destroy(data->fork);

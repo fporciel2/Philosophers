@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 12:07:15 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:57:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -104,7 +104,7 @@ typedef struct s_philo
 	pthread_mutex_t	*stdout_mutex;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*third_fork;
+	pthread_mutex_t	*forks_mutex;
 	pthread_mutex_t	*timestamp;
 	pthread_mutex_t	*is_over_mutex;
 }					t_philo;
@@ -126,6 +126,7 @@ typedef struct s_mutex
 {
 	pthread_mutex_t	is_over_mutex;
 	pthread_mutex_t	stdout_mutex;
+	pthread_mutex_t	*forks_mutex;
 }					t_mutex;
 
 typedef struct s_gdata
@@ -166,9 +167,5 @@ uint64_t	philo_timestamp(void);
 /* philo_normal_execution subroutines.*/
 void		*philo_routine(void *philosopher);
 /* philo_routine subroutines.*/
-int			philo_take_fork(t_philo *p, pthread_mutex_t *fork, int param);
-int			philo_release_forks(t_philo *p);
-int			philo_log_sleep(t_philo *p);
-int			philo_log_eat(t_philo *p);
 
 #endif
