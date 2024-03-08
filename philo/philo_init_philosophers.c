@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/07 17:45:16 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:05:14 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -47,13 +47,13 @@ static void	philo_assign_last_forks(t_gdata *data, uint64_t i)
 	{
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
-		data->philosophers[i].third_fork = NULL;
+		data->philosophers[i].third_fork = &data->forks[i + 1].fork;
 	}
 	else
 	{
-		data->philosophers[i].right_fork = NULL;
+		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i - 1].fork;
-		data->philosophers[i].third_fork = &data->forks[i].fork;
+		data->philosophers[i].third_fork = NULL;
 	}
 }
 

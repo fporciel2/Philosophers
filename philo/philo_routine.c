@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/07 18:13:25 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:12:46 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -39,22 +39,30 @@
 
 static int	philo_sleep(t_philo *philo)
 {
+	pthread_mutex_t	*tmp;
+
 	if (!philo_log_sleep(philo) || (usleep(philo->time_to_sleep * 1000) < 0))
 		return (-1);
 	pthread_mutex_lock(philo->stdout_mutex);
 	if (philo_timestamp() < (*philo->last_meal + philo->time_to_die))
 		printf("[%lu] %lu %s\n", philo_timestamp(), philo->id, THINK);
 	pthread_mutex_unlock(philo->stdout_mutex);
-	if ((philo->number_of_philosophers % 2)
-		&& (philo->id >= (philo->number_of_philosophers - 2)))
-		philo_last_routine(philo);
+	if (philo->id == (philo->number_of_philosophers - 1))
+	{
+		tmp = philo->right_fork;
+		philo->right_fork = philo->third_fork;
+		philo->third_fork = tmp;
+	}
 	return (1);
 }
 
 static int	philo_eat(t_philo *philo)
 {
-	if (!philo_take_fork(philo, philo->right_fork, 0)
-		|| !philo_take_fork(philo, philo->left_fork, 1)
+	if (!philo_take_fork(philo, philo->right_fork, 0))
+		return (0);
+	if (philo->id == (philo->number_of_philosophers - 1))
+		usleep(10000);
+	if (!philo_take_fork(philo, philo->left_fork, 1)
 		|| !philo_log_eat(philo)
 		|| (usleep(philo->time_to_eat * 1000) < 0)
 		|| !philo_release_forks(philo))
@@ -68,18 +76,7 @@ static void	*philo_limited_routine(t_philo *philo)
 
 	while (philo->number_of_meals)
 	{
-		pthread_mutex_lock(philo->stdout_mutex);
-		printf("%lu : %p\n", philo->id, (void *)philo->right_fork);
-		pthread_mutex_unlock(philo->stdout_mutex);
-		if (!philo->right_fork)
-		{
-			usleep(philo->time_to_eat * 1000);
-			tmp = philo->right_fork;
-			philo->right_fork = philo->third_fork;
-			philo->third_fork = tmp;
-			continue ;
-		}
-		else if (!philo_eat(philo) || (philo_sleep(philo) < 0))
+		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
 			return (NULL);
 		philo->number_of_meals--;
 	}
@@ -92,15 +89,7 @@ static void	*philo_unlimited_routine(t_philo *philo)
 
 	while (1)
 	{
-		if (!philo->right_fork)
-		{
-			usleep(philo->time_to_eat * 1000);
-			tmp = philo->right_fork;
-			philo->right_fork = philo->third_fork;
-			philo->third_fork = tmp;
-			continue ;
-		}
-		else if (!philo_eat(philo) || (philo_sleep(philo) < 0))
+		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
 			return (NULL);
 	}
 	return (NULL);
