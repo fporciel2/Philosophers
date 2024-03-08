@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:53:45 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/07 11:22:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:04:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -81,6 +81,7 @@ static int	philo_initialize(t_input *input, t_gdata *global_data)
 	if (!philo_init_timestamps(input, global_data)
 		|| !philo_init_mutexes(input, global_data)
 		|| !philo_init_forks(input, global_data)
+		|| !philo_init_fmutexes(input, global_data)
 		|| !philo_init_philosophers(input, global_data))
 		return (philo_cleanup(global_data));
 	global_data->threads = (pthread_t *)malloc(sizeof(pthread_t)

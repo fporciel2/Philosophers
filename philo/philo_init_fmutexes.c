@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_init_forks.c                                 :+:      :+:    :+:   */
+/*   philo_init_fmutexes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/04 14:35:00 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 16:00:11 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/08 16:09:51 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/08 16:18:57 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
  * problem.
- * Copyright (C) 2024  Federico Porciello
+ * Copyright (C) 2024 Federico Porciello
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,26 +30,10 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program initializes the array of forks.
+ * This part of the program manages the mutexes used to lock the couples of
+ * forks.
  */
 
 #include "philo.h"
 
-int	philo_init_forks(t_input *input, t_gdata *data)
-{
-	uint64_t	i;
 
-	data->forks = (t_fork *)malloc(sizeof(t_fork)
-			* (input->number_of_philosophers + 1));
-	if (!data->forks)
-		return (0);
-	i = 0;
-	while (i < input->number_of_philosophers)
-	{
-		data->forks[i].id = i + 1;
-		pthread_mutex_init(&data->forks[i].fork, NULL);
-		i++;
-	}
-	data->forks[i].id = 0;
-	return (1);
-}

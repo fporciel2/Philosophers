@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 15:49:40 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:18:13 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -111,7 +111,7 @@ typedef struct s_philo
 
 typedef struct s_fork
 {
-	pthread_mutex_t	*forks_mutex;
+	pthread_mutex_t	*fmutex;
 	pthread_mutex_t	fork;
 	uint64_t		id;
 }					t_fork;
@@ -141,6 +141,7 @@ typedef struct s_gdata
 	pthread_t		*threads;
 	t_fork			*forks;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	*fmutex;
 	t_mutex			*mutexes;
 	t_timestamp		*timestamps;
 }					t_gdata;
@@ -160,6 +161,7 @@ int			philo_init_philosophers(t_input *input, t_gdata *global_data);
 int			philo_init_mutexes(t_input *input, t_gdata *global_data);
 int			philo_init_forks(t_input *input, t_gdata *global_data);
 int			philo_init_timestamps(t_input *input, t_gdata *global_data);
+int			philo_init_fmutexes(t_input *input, t_gdata *data);
 int			philo_cleanup(t_gdata *global_data);
 /* philo_special_execution subroutines.*/
 void		*philo_one_routine(void *data);

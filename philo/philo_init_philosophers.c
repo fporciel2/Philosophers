@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 15:54:14 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:08:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -39,19 +39,19 @@ static void	philo_assign_last_forks(t_gdata *data, uint64_t i)
 {
 	if ((i + 1) == (data->number_of_philosophers - 2))
 	{
-		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
+		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
 	}
 	else if ((i + 1) == (data->number_of_philosophers - 1))
 	{
-		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
+		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
 	}
 	else
 	{
-		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
+		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i - 1].fork;
 	}
@@ -61,14 +61,14 @@ static void	philo_assign_forks(t_gdata *data, uint64_t i)
 {
 	if (((i + 1) % 2 != 0) && ((i + 1) < (data->number_of_philosophers - 2)))
 	{
-		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
+		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
 	}
 	else if ((((i + 1) % 2) == 0) && ((i + 1)
 			< (data->number_of_philosophers - 2)))
 	{
-		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
+		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
 	}
