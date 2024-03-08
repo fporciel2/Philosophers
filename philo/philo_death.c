@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 13:51:44 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 14:52:22 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:31:24 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -39,3 +39,40 @@
  */
 
 #include "philo.h"
+
+static int	philo_print_death(t_philo *p)
+{
+	pthread_mutex_lock(p->stdout_mutex);
+	if (philo_timestamp() > (*p->last_meal + p->time_to_die + 10))
+	{
+		pthread_mutex_unlock(p->stdout_mutex);
+		return ;
+	}
+	printf("[%lu] %lu %s\n", philo_timestamp(), philo->id, DEAD);
+	while (p->number_of_philosophers--)
+		usleep(p->time_to_die * 1000);
+	pthread_mutex_unlock(p->stdout_mutex);
+}
+
+static int	philo_wait_for_death(t_philo *p)
+{
+	while (philo_timestamp() < (*p->last_meal + p->time_to_die))
+		usleep(1000);
+}
+
+int	philo_death(t_philo *p, int param)
+{
+	pthread_mutex_lock(p->is_over);
+	pthread_mutex_unlock(p->timestamp);
+	if (param == 0)
+		pthread_mutex_unlock(p->forks_mutex);
+	if (param == 1)
+	{
+		pthread_mutex_unlock(p->right_fork);
+		pthread_mutex_unlock(p->left_fork);
+	}
+	philo_wait_for_death(p);
+	philo_print_death(p);
+	pthread_mutex_unlock(p->is_over);
+	return (0);
+}

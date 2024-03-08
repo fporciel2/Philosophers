@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 14:57:16 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:08:50 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -42,6 +42,9 @@ static int	philo_sleep(t_philo *philo)
 	if (!philo_log_sleep(philo)
 		|| (usleep(philo->time_to_sleep * 1000) < 0))
 		return (0);
+	pthread_mutex_lock(philo->stdout_mutex);
+	printf("[%lu] %lu %s\n", philo_timestamp(), philo->id, THINK);
+	pthread_mutex_unlock(philo->stdout_mutex);
 	return (1);
 }
 
