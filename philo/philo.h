@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:51:14 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:49:40 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -111,6 +111,7 @@ typedef struct s_philo
 
 typedef struct s_fork
 {
+	pthread_mutex_t	*forks_mutex;
 	pthread_mutex_t	fork;
 	uint64_t		id;
 }					t_fork;
@@ -126,7 +127,6 @@ typedef struct s_mutex
 {
 	pthread_mutex_t	is_over_mutex;
 	pthread_mutex_t	stdout_mutex;
-	pthread_mutex_t	*forks_mutex;
 }					t_mutex;
 
 typedef struct s_gdata

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:23:43 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:54:14 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -35,40 +35,40 @@
 
 #include "philo.h"
 
-static void	philo_assign_last_forks(t_gdata *data, uint64_t i, uint64_t j)
+static void	philo_assign_last_forks(t_gdata *data, uint64_t i)
 {
 	if ((i + 1) == (data->number_of_philosophers - 2))
 	{
-		data->philosophers[i].forks_mutex = &data->mutexes->forks_mutex[j];
+		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
 	}
 	else if ((i + 1) == (data->number_of_philosophers - 1))
 	{
-		data->philosophers[i].forks_mutex = &data->mutexes->forks_mutex[j];
+		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
 	}
 	else
 	{
-		data->philosophers[i].forks_mutex = &data->mutexes->forks_mutex[j - 1];
+		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i - 1].fork;
 	}
 }
 
-static void	philo_assign_forks(t_gdata *data, uint64_t i, uint64_t j)
+static void	philo_assign_forks(t_gdata *data, uint64_t i)
 {
 	if (((i + 1) % 2 != 0) && ((i + 1) < (data->number_of_philosophers - 2)))
 	{
-		data->philosophers[i].forks_mutex = &data->mutexes->forks_mutex[j];
+		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
 	}
 	else if ((((i + 1) % 2) == 0) && ((i + 1)
 			< (data->number_of_philosophers - 2)))
 	{
-		data->philosophers[i].forks_mutex = &data->mutexes->forks_mutex[j];
+		data->philosophers[i].forks_mutex = &data->forks[i].forks_mutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
 	}
@@ -95,23 +95,19 @@ static void	philo_assign_starting_values(t_gdata *data, uint64_t i,
 int	philo_init_philosophers(t_input *input, t_gdata *data)
 {
 	uint64_t	i;
-	uint64_t	j;
 
 	data->philosophers = (t_philo *)malloc(sizeof(t_philo)
 			* (input->number_of_philosophers + 1));
 	if (!data->philosophers)
 		return (0);
 	i = 0;
-	j = 0;
 	while (i < input->number_of_philosophers)
 	{
 		philo_assign_starting_values(data, i, input);
-		philo_assign_forks(data, i, j);
+		philo_assign_forks(data, i);
 		data->philosophers[i].timestamp = &data->timestamps[i].timestamp_mutex;
 		data->philosophers[i].is_over_mutex = &data->mutexes->is_over_mutex;
 		i++;
-		if ((i % 2) == 0)
-			j++;
 	}
 	data->philosophers[i].id = 0;
 	return (1);
