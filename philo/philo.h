@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 12:57:18 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:51:14 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -167,5 +167,12 @@ uint64_t	philo_timestamp(void);
 /* philo_normal_execution subroutines.*/
 void		*philo_routine(void *philosopher);
 /* philo_routine subroutines.*/
+int			philo_take_forks(t_philo *p);
+int			philo_log_eat(t_philo *p);
+int			philo_release_forks(t_philo *p);
+int			philo_log_sleep(t_philo *p);
+int			philo_log_think(t_philo *p);
+/* death routine */
+int			philo_death(t_philo *p, int param);
 
 #endif

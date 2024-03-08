@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:21:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:37:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -39,17 +39,20 @@
 
 static int	philo_sleep(t_philo *philo)
 {
-	pthread_mutex_lock(philo->stdout_mutex);
-	printf("Memory test.\n");
-	pthread_mutex_unlock(philo->stdout_mutex);
+	if (!philo_log_sleep(philo)
+		|| (usleep(philo->time_to_sleep * 1000) < 0)
+		|| !philo_log_think(philo))
+		return (0);
 	return (1);
 }
 
 static int	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->stdout_mutex);
-	printf("Memory test2.\n");
-	pthread_mutex_unlock(philo->stdout_mutex);
+	if (!philo_take_forks(philo)
+		|| !philo_log_eat(philo)
+		|| (usleep(philo->time_to_eat * 1000) < 0)
+		|| !philo_release_forks(philo))
+		return (0);
 	return (1);
 }
 
@@ -57,7 +60,7 @@ static void	*philo_limited_routine(t_philo *philo)
 {
 	while (philo->number_of_meals)
 	{
-		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
+		if (!philo_eat(philo) || !philo_sleep(philo))
 			return (NULL);
 		philo->number_of_meals--;
 	}
@@ -68,7 +71,7 @@ static void	*philo_unlimited_routine(t_philo *philo)
 {
 	while (1)
 	{
-		if (!philo_eat(philo) || (philo_sleep(philo) < 0))
+		if (!philo_eat(philo) || !philo_sleep(philo))
 			return (NULL);
 	}
 	return (NULL);
