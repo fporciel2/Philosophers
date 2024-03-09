@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:42:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/09 11:15:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 11:49:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -94,6 +94,7 @@ static void	philo_assign_starting_values(t_gdata *data, uint64_t i,
 	data->philosophers[i].last_meal = &data->timestamps[i].timestamp;
 	data->philosophers[i].is_over = &data->is_over;
 	data->philosophers[i].stdout_mutex = &data->mutexes->stdout_mutex;
+	data->philosophers[i].start_mutex = &data->mutexes->start_mutex;
 }
 
 int	philo_init_philosophers(t_input *input, t_gdata *data)

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/01 10:48:25 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 16:18:13 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 11:49:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -107,6 +107,7 @@ typedef struct s_philo
 	pthread_mutex_t	*forks_mutex;
 	pthread_mutex_t	*timestamp;
 	pthread_mutex_t	*is_over_mutex;
+	pthread_mutex_t	*start_mutex;
 }					t_philo;
 
 typedef struct s_fork
@@ -125,6 +126,7 @@ typedef struct s_timestamp
 
 typedef struct s_mutex
 {
+	pthread_mutex_t	start_mutex;
 	pthread_mutex_t	is_over_mutex;
 	pthread_mutex_t	stdout_mutex;
 }					t_mutex;

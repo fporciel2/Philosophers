@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 15:08:50 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 11:47:56 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,7 +43,8 @@ static int	philo_sleep(t_philo *philo)
 		|| (usleep(philo->time_to_sleep * 1000) < 0))
 		return (0);
 	pthread_mutex_lock(philo->stdout_mutex);
-	printf("[%lu] %lu %s\n", philo_timestamp(), philo->id, THINK);
+	if (philo_timestamp() < (*philo->last_meal + philo->time_to_die))
+		printf("[%lu] %lu %s\n", philo_timestamp(), philo->id, THINK);
 	pthread_mutex_unlock(philo->stdout_mutex);
 	return (1);
 }
@@ -89,11 +90,11 @@ void	*philo_routine(void *philosopher)
 	if ((philo->number_of_philosophers % 2)
 		&& (philo->id >= (philo->number_of_philosophers - 2)))
 		philo->time_to_eat *= 2;
-	pthread_mutex_lock(philo->is_over_mutex);
+	pthread_mutex_lock(philo->start_mutex);
 	pthread_mutex_lock(philo->timestamp);
 	*philo->last_meal = philo_timestamp();
 	pthread_mutex_unlock(philo->timestamp);
-	pthread_mutex_unlock(philo->is_over_mutex);
+	pthread_mutex_unlock(philo->start_mutex);
 	if (philo->number_of_meals == 0)
 		return (philo_unlimited_routine(philo, eat_time));
 	else
