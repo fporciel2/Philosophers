@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 16:09:51 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 16:18:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 11:24:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -36,4 +36,38 @@
 
 #include "philo.h"
 
+static int	philo_send_fmutex_to_corresponding_forks(t_gdata *data)
+{
+	uint64_t	i;
+	uint64_t	j;
 
+	i = 0;
+	j = 0;
+	while (data->forks[i].id != 0)
+	{
+		data->forks[i].fmutex = &data->fmutex[j];
+		i++;
+		if (((i >= 2) && (i % 2 == 0))
+			&& !(((data->number_of_philosophers % 2) != 0)
+			&& ((i + 1) == data->number_of_philosophers)))
+			j++;
+	}
+	return (1);
+}
+
+int	philo_init_fmutexes(t_input *input, t_gdata *data)
+{
+	uint64_t	i;
+
+	i = 0;
+	data->fmutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+			* (input->number_of_philosophers / 2));
+	if (!data->fmutex)
+		return (0);
+	while (i < (input->number_of_philosophers / 2))
+	{
+		pthread_mutex_init(&data->fmutex[i], NULL);
+		i++;
+	}
+	return (philo_send_fmutex_to_corresponding_forks(data));
+}

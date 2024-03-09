@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 14:25:58 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 15:47:25 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 10:47:11 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -38,6 +38,7 @@
 
 int	philo_init_mutexes(t_input *input, t_gdata *data)
 {
+	(void)input;
 	data->mutexes = (t_mutex *)malloc(sizeof(t_mutex));
 	if (!data->mutexes)
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 13:41:28 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:27:53 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 10:46:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -35,9 +35,10 @@
 
 #include "philo.h"
 
-static void	philo_destroy_forks(t_fork *forks)
+static void	philo_destroy_forks(t_fork *forks, pthread_mutex_t *forks_mutex)
 {
 	uint64_t	i;
+	uint64_t	j;
 
 	i = 0;
 	while (forks[i].id)
@@ -45,7 +46,15 @@ static void	philo_destroy_forks(t_fork *forks)
 		pthread_mutex_destroy(&forks[i].fork);
 		i++;
 	}
+	j = forks[i].id / 2;
+	i = 0;
 	free(forks);
+	while (i < j)
+	{
+		pthread_mutex_destroy(&forks_mutex[i]);
+		i++;
+	}
+	free(forks_mutex);
 }
 
 static void	philo_destroy_timestamps(t_timestamp *timestamps)
@@ -61,17 +70,8 @@ static void	philo_destroy_timestamps(t_timestamp *timestamps)
 	free(timestamps);
 }
 
-static void	philo_destroy_mutexes(t_mutex *mutexes, uint64_t loop)
+static void	philo_destroy_mutexes(t_mutex *mutexes)
 {
-	uint64_t	i;
-
-	i = 0;
-	if (mutexes->forks_mutex)
-	{
-		while (i < (loop / 2))
-			pthread_mutex_destroy(&mutexes->forks_mutex[i++]);
-		free(mutexes->forks_mutex);
-	}
 	pthread_mutex_destroy(&mutexes->stdout_mutex);
 	pthread_mutex_destroy(&mutexes->is_over_mutex);
 	free(mutexes);
@@ -84,6 +84,7 @@ static int	philo_cleanup_null(t_gdata *data)
 	data->timestamps = NULL;
 	data->mutexes = NULL;
 	data->fork = NULL;
+	data->fmutex = NULL;
 	return (0);
 }
 
@@ -91,12 +92,12 @@ int	philo_cleanup(t_gdata *data)
 {
 	if (data->philosophers)
 		free(data->philosophers);
-	if (data->forks)
-		philo_destroy_forks(data->forks);
+	if (data->forks || data->fmutex)
+		philo_destroy_forks(data->forks, data->fmutex);
 	if (data->timestamps)
 		philo_destroy_timestamps(data->timestamps);
 	if (data->mutexes)
-		philo_destroy_mutexes(data->mutexes, data->number_of_philosophers);
+		philo_destroy_mutexes(data->mutexes);
 	if (data->fork)
 	{
 		pthread_mutex_destroy(data->fork);
