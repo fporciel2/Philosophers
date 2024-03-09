@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 13:41:22 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/09 12:23:55 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 12:51:07 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,6 +43,10 @@ int	philo_take_forks(t_philo *p)
 		|| ((philo_timestamp() + (uint64_t)p->time_to_eat) >= (*p->last_meal
 			+ (uint64_t)p->time_to_die)))
 		return (philo_death(p, 0));
+	pthread_mutex_lock(p->stdout_mutex);
+	printf("First term: %lu\n", philo_timestamp() + p->time_to_eat);
+	printf("Second term: %lu\n", *p->last_meal + p->time_to_eat);
+	pthread_mutex_unlock(p->stdout_mutex);
 	pthread_mutex_unlock(p->timestamp);
 	pthread_mutex_lock(p->right_fork);
 	pthread_mutex_lock(p->stdout_mutex);

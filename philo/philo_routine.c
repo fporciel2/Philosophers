@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:18:52 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/09 12:26:23 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/09 12:51:42 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -98,11 +98,17 @@ void	*philo_routine(void *philosopher)
 	if ((philo->number_of_philosophers % 2)
 		&& (philo->id >= (philo->number_of_philosophers - 2)))
 		philo->time_to_eat *= 2;
+	pthread_mutex_lock(philo->stdout_mutex);
+	printf("Time to eat: %lu\n", philo->time_to_eat);
+	pthread_mutex_unlock(philo->stdout_mutex);
 	pthread_mutex_lock(philo->start_mutex);
 	pthread_mutex_lock(philo->timestamp);
 	*philo->last_meal = philo_timestamp();
 	pthread_mutex_unlock(philo->timestamp);
 	pthread_mutex_unlock(philo->start_mutex);
+	pthread_mutex_lock(philo->stdout_mutex);
+	printf("Starting time: %lu\n", *philo->last_meal);
+	pthread_mutex_unlock(philo->stdout_mutex);
 	if (philo->number_of_meals == 0)
 		return (philo_unlimited_routine(philo, eat_time));
 	else
