@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:21:16 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 09:48:47 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 17:01:07 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -55,7 +55,7 @@ static ssize_t	philo_noplen(char *str, t_input *input)
 			if ((str[len] < 48) || (str[len] > 57))
 			{
 				input->is_valid = 0;
-				input->badnop = BANOP;
+				input->badnop = BADNOP;
 				return (-1);
 			}
 			len++;
@@ -122,7 +122,7 @@ static uint64_t	philo_atolui(char *str, ssize_t len)
 		len--;
 		power_of_ten = 10;
 	}
-	reusult += (str[i] - 48);
+	result += (str[i] - 48);
 	return (result);
 }
 

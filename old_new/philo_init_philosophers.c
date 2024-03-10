@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 12:49:09 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 13:34:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 16:55:07 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -91,7 +91,7 @@ static void	philo_assign_values(t_global *data, uint64_t i, t_input *input)
 	data->philosophers[i].time_to_sleep = input->time_to_sleep;
 	data->philosophers[i].number_of_meals = input->number_of_meals;
 	data->philosophers[i].last_meal = &data->timestamps[i].timestamp;
-	data->philosophers[i].intern_last_meal = &data->timestamps[i].timestamp;
+	data->philosophers[i].intern_last_meal = data->timestamps[i].timestamp;
 	data->philosophers[i].stdout_mutex = &data->mutexes->stdout_mutex;
 	data->philosophers[i].start_mutex = &data->mutexes->start_mutex;
 }
@@ -109,7 +109,7 @@ int	philo_init_philosophers(t_input *input, t_global *data)
 	{
 		philo_assign_values(data, i, input);
 		philo_assign_forks(data, i);
-		data->philosophers[i].timestamp = &data->timestamp[i].timestamp_mutex;
+		data->philosophers[i].timestamp = &data->timestamps[i].timestamp_mutex;
 		data->philosophers[i].is_over_mutex = &data->mutexes->is_over_mutex;
 		i++;
 	}

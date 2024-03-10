@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_special_file.c                               :+:      :+:    :+:   */
+/*   philo_init_timers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 12:02:10 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 12:08:57 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/10 13:42:58 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/10 17:00:01 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,31 +30,39 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program executes the special routine for one philosopher or
- * the timestamp's retrievement or the number of meals to eat setting.
+ * This part of the program initializes the timers.
  */
 
 #include "philo.h"
 
-void	philo_set_iterations(uint64_t number_of_meals, t_global *data)
+static void	philo_assign_values(t_global *data, uint64_t i, t_input *input)
 {
-	data->number_of_meals = number_of_meals;
+	data->timers[i].id = i + 1;
+	data->timers[i].time_to_die = input->time_to_die;
+	data->timers[i].time_to_eat = input->time_to_eat;
+	data->timers[i].time_to_sleep = input->time_to_sleep;
+	data->timers[i].number_of_meals = input->number_of_meals;
+	data->timers[i].last_meal = &data->timestamps[i].timestamp;
+	data->timers[i].stdout_mutex = &data->mutexes->stdout_mutex;
+	data->timers[i].start_mutex = &data->mutexes->start_mutex;
 }
 
-uint64_t	philo_timestamp(void)
+int	philo_init_timers(t_input *input, t_global *data)
 {
-	struct timeval	tv;
+	uint64_t	i;
 
-	gettimeofday(&tv, NULL);
-	return ((uint64_t)(tv.tv_sec * 1000) + (uint64_t)(tv.tv_usec / 1000));
-}
-
-void	*philo_special_routine(void *data)
-{
-	t_global	*casted_data;
-
-	casted_data = (t_global *)data;
-	usleep(casted_data->time_to_die * 1000);
-	ptintf("[%lu] 1 %s\n", philo_timestamp(), DEAD);
-	return (NULL);
+	data->timers = (t_timer *)malloc(sizeof(t_timer)
+			* (input->number_of_philosophers + 1));
+	if (!data->timers)
+		return (0);
+	i = 0;
+	while (i < input->number_of_philosophers)
+	{
+		philo_assign_values(data, i, input);
+		data->timers[i].timestamp = &data->timestamps[i].timestamp_mutex;
+		data->timers[i].is_over_mutex = &data->mutexes->is_over_mutex;
+		i++;
+	}
+	data->timers[i].id = 0;
+	return (1);
 }

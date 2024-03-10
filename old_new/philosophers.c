@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:10:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 16:23:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 17:03:24 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -57,7 +57,7 @@ static void	philo_execute_routine(t_global *data, uint64_t *i)
 	(*i)++;
 }
 
-static void	philo_normal_execution(t_global *data)
+static int	philo_normal_execution(t_global *data)
 {
 	uint64_t	i;
 
