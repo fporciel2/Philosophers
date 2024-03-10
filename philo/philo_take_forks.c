@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 15:38:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 15:45:39 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 15:50:21 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -34,6 +34,19 @@
  */
 
 #include "philo.h"
+
+int	philo_release_forks(t_philo *philo)
+{
+	pthread_mutex_lock(philo->timestamp);
+	*philo->last_meal = philo_timestamp();
+	philo->intern_last_meal = *philo->last_meal;
+	pthread_mutex_unlock(philo->timestamp);
+	pthread_mutex_unlock(philo->start_mutex);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->forks_mutex);
+	return (1);
+}
 
 int	philo_take_forks(t_philo *philo)
 {
