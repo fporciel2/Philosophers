@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:10:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 12:48:10 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 14:40:58 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -34,6 +34,41 @@
  */
 
 #include "philo.h"
+
+static void	philo_join_routines(t_global *data)
+{
+	uint64_t	i;
+
+	i = 0;
+	while (i != data->number_of_philosophers)
+	{
+		pthread_join(data->thread_philosophers[i], NULL);
+		pthread_join(data->thread_timers[i], NULL);
+		i++;
+	}
+}
+
+static void	philo_execute_routine(t_global *data, uint64_t *i)
+{
+	pthread_create(&data->thread_philosophers[*i], NULL,
+			philo_routine, &data->philosophers[*i]);
+	pthread_create(&data->thread_timers[*i], NULL,
+			philo_timer, &data->philosophers[*i]);
+	(*i)++;
+}
+
+static void	philo_normal_execution(t_global *data)
+{
+	uint64_t	i;
+
+	i = 0;
+	pthread_mutex_lock(&data->mutexes->start_mutex);
+	while (data->philosophers[i].id)
+		philo_execute_routine(data, &i);
+	pthread_mutex_unlock(&data->mutexes->start_mutex);
+	philo_join_routines(data);
+	return (philo_cleanup(data));
+}
 
 static int	philo_initialize(t_input *input, t_global *data)
 {
