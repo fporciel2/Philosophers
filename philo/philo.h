@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 07:26:14 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 08:04:08 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 09:14:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -168,5 +168,6 @@ void	philo_init_input(t_input *input);
 void	philo_number_of_philosophers(char *argv, t_input *input);
 void	philo_init_time(char *argv, t_input *input, int param);
 void	philo_number_of_meals(char *argv, t_input *input);
+int		philo_input_is_not_valid(t_input *input);
 
 #endif
