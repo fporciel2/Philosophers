@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:10:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 09:17:14 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 11:40:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -34,6 +34,30 @@
  */
 
 #include "philo.h"
+
+static int	philo_initialize(t_input *input, t_global *data)
+{
+	data->thread_philosophers = NULL;
+	data->thread_timers = NULL;
+	if (input->is_special)
+		return (philo_special_execution(input, data));
+	if (input->is_limited)
+		philo_set_iterations(input->number_of_meals, data);
+	philo_init_data(input, data);
+	if (!philo_init_timestamps(input, data)
+		|| !philo_init_mutexes(input, data)
+		|| !philo_init_forks(input, data)
+		|| !philo_init_fmutexes(input, data)
+		|| !philo_init_informations(input, data))
+		return (philo_cleanup(data));
+	data->thread_philosophers = (pthread_t *)malloc(sizeof(pthread_t)
+			* input->number_of_philosophers);
+	data->thread_timers = (pthread_t *)malloc(sizeof(pthread_t)
+			* input->number_of_philosophers);
+	if (!data->thread_philosophers || !data->thread_timers)
+		return (philo_cleanup(data));
+	return (philo_normal_execution(data));
+}
 
 int	main(int argc, char **argv)
 {
