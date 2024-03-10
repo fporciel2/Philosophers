@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 07:26:14 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 12:14:01 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 12:54:30 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -97,6 +97,7 @@ typedef struct s_philo
 	useconds_t		time_to_sleep;
 	uint64_t		number_of_meals;
 	uint64_t		*last_meal;
+	uint64_t		intern_last_meal;
 	pthread_mutex_t	*stdout_mutex;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
@@ -177,7 +178,8 @@ int			philo_init_timestamps(t_input *input, t_global *data);
 int			philo_init_mutexes(t_input *input, t_global *data);
 int			philo_init_forks(t_input *input, t_global *data);
 int			philo_init_fmutexes(t_input *input, t_global *data);
-int			philo_init_informations(t_input *input, t_global *data);
+int			philo_init_philosophers(t_input *input, t_global *data);
+int			philo_init_timers(t_input *input, t_global *data);
 int			philo_cleanup(t_global *data);
 /*Special execution functions.*/
 void		*philo_special_routine(void *data);
