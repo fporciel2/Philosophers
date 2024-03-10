@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 07:26:14 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 11:45:54 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/10 12:14:01 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -158,26 +158,29 @@ typedef struct s_global
 	pthread_t		*thread_timers;
 	t_fork			*forks;
 	t_timestamp		*timestamps;
-	t_mutex			*mutex;
+	t_mutex			*mutexes;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	*fmutex;
 }					t_global;
 
 /*Parsing functions.*/
-void	philo_init_input(t_input *input);
-void	philo_number_of_philosophers(char *argv, t_input *input);
-void	philo_init_time(char *argv, t_input *input, int param);
-void	philo_number_of_meals(char *argv, t_input *input);
-int		philo_input_is_not_valid(t_input *input);
+void		philo_init_input(t_input *input);
+void		philo_number_of_philosophers(char *argv, t_input *input);
+void		philo_init_time(char *argv, t_input *input, int param);
+void		philo_number_of_meals(char *argv, t_input *input);
+int			philo_input_is_not_valid(t_input *input);
 /*Initialization functions.*/
-int		philo_special_execution(t_input *input, t_global *data);
-void	philo_set_iterations(uint64_t number_of_meals, t_global *data);
-void	philo_init_data(t_input *input, t_global *data);
-int		philo_init_timestamps(t_input *input, t_global *data);
-int		philo_init_mutexes(t_input *input, t_global *data);
-int		philo_init_forks(t_input *input, t_global *data);
-int		philo_init_fmutexes(t_input *input, t_global *data);
-int		philo_init_informations(t_input *input, t_global *data);
-int		philo_cleanup(t_global *data);
+int			philo_special_execution(t_input *input, t_global *data);
+void		philo_set_iterations(uint64_t number_of_meals, t_global *data);
+void		philo_init_data(t_input *input, t_global *data);
+int			philo_init_timestamps(t_input *input, t_global *data);
+int			philo_init_mutexes(t_input *input, t_global *data);
+int			philo_init_forks(t_input *input, t_global *data);
+int			philo_init_fmutexes(t_input *input, t_global *data);
+int			philo_init_informations(t_input *input, t_global *data);
+int			philo_cleanup(t_global *data);
+/*Special execution functions.*/
+void		*philo_special_routine(void *data);
+uint64_t	philo_timestamp(void);
 
 #endif
