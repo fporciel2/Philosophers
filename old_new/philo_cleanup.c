@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 14:04:24 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 17:02:27 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:46:33 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
