@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 13:42:58 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 17:00:01 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 09:23:56 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -38,6 +38,7 @@
 static void	philo_assign_values(t_global *data, uint64_t i, t_input *input)
 {
 	data->timers[i].id = i + 1;
+	data->timers[i].number_of_philosophers = input->number_of_philosophers;
 	data->timers[i].time_to_die = input->time_to_die;
 	data->timers[i].time_to_eat = input->time_to_eat;
 	data->timers[i].time_to_sleep = input->time_to_sleep;

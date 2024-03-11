@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 12:35:20 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 12:42:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 09:43:12 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -45,10 +45,11 @@ static int	philo_send_fmutex_to_corresponding_forks(t_global *data)
 	while (data->forks[i].id != 0)
 	{
 		data->forks[i].fmutex = &data->fmutex[j];
+printf("[%lu], fmutex_index: %lu fork: %p fmutex: %p fmutex_to_fork: %p\n", (i + 1), (j + 1), (void *)&data->forks[i].fork, (void *)&data->fmutex[j], (void *)data->forks[i].fmutex);
 		i++;
-		if (((i >= 2) && (i % 2 == 0))
-			&& !(((data->number_of_philosophers % 2) != 0)
-			&& ((i + 1) == data->number_of_philosophers)))
+		if (((i >= 2) && !(i % 2) && !(data->number_of_philosophers % 2))
+			|| ((data->number_of_philosophers % 2) && (i >= 2) && !(i % 2)
+			&& ((i + 1) <= (data->number_of_philosophers - 2))))
 			j++;
 	}
 	return (1);

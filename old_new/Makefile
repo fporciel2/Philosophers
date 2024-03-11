@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/10 06:01:44 by fporciel          #+#    #+#              #
-#    Updated: 2024/03/10 07:23:33 by fporciel         ###   ########.fr        #
+#    Updated: 2024/03/11 09:45:25 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -75,8 +75,7 @@ mem:
 
 helgrind: all
 	@echo "\nEnter parameters for Valgrind's helgrind:"
-	@read parameters; valgrind --tool=helgrind --trace-children=yes \
-		--track-origins=yes ./$(NAME) $$parameters
+	@read parameters; valgrind --tool=helgrind ./$(NAME) $$parameters
 
 thread: all
 	@$(CC) $(CSTD) $(CFLAGS) $(INCLUDE) $(DMAXPHILOS) $(TFLAGS) \
