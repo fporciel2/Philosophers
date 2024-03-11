@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 12:49:09 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 10:18:31 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:33:36 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -43,33 +43,18 @@ static void	philo_assign_last_forks(t_global *data, uint64_t i)
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
-		printf("%lu: ", (i + 1));
-		printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
-		printf("right fork assigned: %p ", (void *)&data->forks[i].fork);
-		printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
-		printf("left fork assigned: %p\n", (void *)&data->forks[i + 1].fork);
 	}
 	else if ((i + 1) == (data->number_of_philosophers - 1))
 	{
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
-		printf("%lu: ", (i + 1));
-		printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
-		printf("right fork assigned: %p ", (void *)&data->forks[i - 1].fork);
-		printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
-		printf("left fork assigned: %p\n", (void *)&data->forks[i].fork);
 	}
 	else
 	{
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i - 1].fork;
-		printf("%lu: ", (i + 1));
-		printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
-		printf("right fork assigned: %p ", (void *)&data->forks[i].fork);
-		printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
-		printf("left fork assigned: %p\n", (void *)&data->forks[i - 1].fork);
 	}
 }
 
@@ -82,11 +67,6 @@ static void	philo_assign_forks(t_global *data, uint64_t i)
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
-		printf("%lu: ", (i + 1));
-		printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
-		printf("right fork assigned: %p ", (void *)&data->forks[i].fork);
-		printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
-		printf("left fork assigned: %p\n", (void *)&data->forks[i + 1].fork);
 	}
 	else if ((!(data->number_of_philosophers % 2) && ((i % 2) || (i == 1)))
 			|| ((data->number_of_philosophers % 2) && ((i % 2) || (i == 1))
@@ -95,11 +75,6 @@ static void	philo_assign_forks(t_global *data, uint64_t i)
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i - 1].fork;
 		data->philosophers[i].left_fork = &data->forks[i].fork;
-		printf("%lu: ", (i + 1));
-		printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
-		printf("right fork assigned: %p ", (void *)&data->forks[i - 1].fork);
-		printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
-		printf("left fork assigned: %p\n", (void *)&data->forks[i].fork);
 	}
 	else if (((i + 1) >= (data->number_of_philosophers - 2))
 			&& (data->number_of_philosophers % 2))
@@ -141,3 +116,13 @@ int	philo_init_philosophers(t_input *input, t_global *data)
 	data->philosophers[i].id = 0;
 	return (1);
 }
+/*
+printf("%lu: ", (i + 1));
+printf("right fork possessed: %p ", (void *)data->philosophers[i].right_fork);
+printf("right fork assigned: %p ", (void *)&data->forks[i - 1].fork);
+printf("left fork possessed: %p ", (void *)data->philosophers[i].left_fork);
+printf("left fork assigned: %p\n", (void *)&data->forks[i].fork);
+printf("\n\nfmutex possessed: %p ", (void *)data->philosophers[i].forks_mutex);
+printf("fmutex assigned: %p\n\n", (void *)data->forks[i].fmutex);
+ *
+ * /
