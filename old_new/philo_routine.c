@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 11:16:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 13:39:38 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:39:31 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -45,8 +45,12 @@ static void	philo_eat_and_release(t_philo *p)
 		p->intern_last_meal = 0;
 	pthread_mutex_unlock(p->stdout_mutex);
 	usleep(p->time_to_eat * 1000);
-	*p->last_meal = philo_timestamp();
-	p->intern_last_meal = *p->last_meal;
+	if ((p->intern_last_meal != 0)
+		&& (philo_timestamp() < (p->intern_last_meal + p->time_to_die)))
+	{
+		*p->last_meal = philo_timestamp();
+		p->intern_last_meal = *p->last_meal;
+	}
 	pthread_mutex_unlock(p->timestamp);
 	pthread_mutex_unlock(p->right_fork);
 	pthread_mutex_unlock(p->left_fork);
@@ -98,7 +102,7 @@ static void	*philo_unlimited(t_philo *p)
 
 static void	*philo_limited(t_philo *p)
 {
-	while (p->number_of_philosophers--)
+	while (p->number_of_meals--)
 	{
 		if (p->intern_last_meal == 0)
 			return (NULL);
@@ -135,7 +139,7 @@ void	*philo_routine(void *info)
 	*p->last_meal = philo_timestamp();
 	p->intern_last_meal = *p->last_meal;
 	pthread_mutex_unlock(p->timestamp);
-	if (p->number_of_philosophers)
+	if (p->number_of_meals)
 		return (philo_limited(p));
 	else
 		return (philo_unlimited(p));
