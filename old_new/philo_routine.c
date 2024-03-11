@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_routine.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 14:44:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 15:21:50 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/11 11:16:32 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/11 12:36:39 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,70 +30,113 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program contains the routines for each philosopher.
+ * This part of the program is the philosophers' routine.
  */
 
 #include "philo.h"
 
-static int	philo_sleep(t_philo *philo)
+static void	philo_eat_and_release(t_philo *p)
 {
-	if (!philo_log(philo, SLEEP, 3)
-		|| (usleep(philo->time_to_sleep * 1000))
-		|| !philo_log(philo, THINK, 4))
-		return (0);
-	return (1);
+	pthread_mutex_lock(p->stdout_mutex);
+	pthread_mutex_lock(p->timestamp);
+	if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
+	else
+		p->intern_last_meal = 0;
+	pthread_mutex_unlock(p->stdout_mutex);
+	usleep(p->time_to_eat * 1000);
+	*p->last_meal = philo_timestamp();
+	p->intern_last_meal = *p->last_meal;
+	pthread_mutex_unlock(p->timestamp);
+	pthread_mutex_unlock(p->right_fork);
+	pthread_mutex_unlock(p->left_fork);
 }
 
-static int	philo_eat(t_philo *philo)
+static void	philo_take_forks(t_philo *p)
 {
-	if (!philo_take_forks(philo)
-		|| !philo_log(philo, EAT, 2)
-		|| (usleep(philo->time_to_eat * 1000))
-		|| !philo_release_forks(philo))
-		return (0);
-	return (1);
+	pthread_mutex_lock(p->forks_mutex);
+	pthread_mutex_lock(p->right_fork);
+	pthread_mutex_lock(p->stdout_mutex);
+	if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
+	else
+		p->intern_last_meal = 0;
+	pthread_mutex_unlock(p->stdout_mutex);
+	pthread_mutex_lock(p->left_fork);
+	pthread_mutex_lock(p->stdout_mutex);
+	if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
+	else
+		p->intern_last_meal = 0;
+	pthread_mutex_unlock(p->stdout_mutex);
 }
 
-static void	*philo_limited_routine(t_philo *philo)
-{
-	while (philo->number_of_meals)
-	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
-			return (NULL);
-		philo->number_of_meals--;
-	}
-	pthread_mutex_lock(philo->timestamp);
-	while (philo->number_of_philosophers)
-	{
-		usleep(philo->time_to_die * 1000);
-		philo->number_of_philosophers--;
-	}
-	pthread_mutex_unlock(philo->timestamp);
-	return (NULL);
-}
-
-static void	*philo_unlimited_routine(t_philo *philo)
+static void	*philo_unlimited(t_philo *p)
 {
 	while (1)
 	{
-		if (!philo_eat(philo) || !philo_sleep(philo))
+		if (p->intern_last_meal == 0)
 			return (NULL);
+		philo_take_forks(p);
+		philo_eat_and_release(p);
+		pthread_mutex_lock(p->stdout_mutex);
+		if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+			printf("[%lu] %lu %s\n", philo_timestamp(), p->id, SLEEP);
+		else
+			p->intern_last_meal = 0;
+		pthread_mutex_unlock(p->stdout_mutex);
+		usleep(p->time_to_sleep * 1000);
+		pthread_mutex_lock(p->stdout_mutex);
+		if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+			printf("[%lu] %lu %s\n", philo_timestamp(), p->id, THINK);
+		else
+			p->intern_last_meal = 0;
+		pthread_mutex_unlock(p->stdout_mutex);
 	}
+	return (NULL);
+}
+
+static void	*philo_limited(t_philo *p)
+{
+	while (p->number_of_philosophers--)
+	{
+		if (p->intern_last_meal == 0)
+			return (NULL);
+		philo_take_forks(p);
+		philo_eat_and_release(p);
+		pthread_mutex_lock(p->stdout_mutex);
+		if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+			printf("[%lu] %lu %s\n", philo_timestamp(), p->id, SLEEP);
+		else
+			p->intern_last_meal = 0;
+		pthread_mutex_unlock(p->stdout_mutex);
+		usleep(p->time_to_sleep * 1000);
+		pthread_mutex_lock(p->stdout_mutex);
+		if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
+			printf("[%lu] %lu %s\n", philo_timestamp(), p->id, THINK);
+		else
+			p->intern_last_meal = 0;
+		pthread_mutex_unlock(p->stdout_mutex);
+	}
+	pthread_mutex_lock(p->timestamp);
+	*p->last_meal = p->intern_last_meal + p->time_to_die + 1000;
+	pthread_mutex_unlock(p->timestamp);
 	return (NULL);
 }
 
 void	*philo_routine(void *info)
 {
-	t_philo	*philo;
+	t_philo	*p;
 
-	philo = (t_philo *)info;
-	pthread_mutex_lock(philo->start_mutex);
-	pthread_mutex_lock(philo->timestamp);
-	*philo->last_meal = philo_timestamp();
-	philo->intern_last_meal = *philo->last_meal;
-	pthread_mutex_unlock(philo->timestamp);
-	pthread_mutex_unlock(philo->start_mutex);
-	if (philo->number_of_meals)
-		return (philo_limited_routine(philo));
-	return (philo_unlimited_routine(philo));
+	p = (t_philo *)p;
+	pthread_mutex_lock(p->start_mutex);
+	pthread_mutex_unlock(p->start_mutex);
+	pthread_mutex_lock(p->timestamp);
+	*p->last_meal = philo_timestamp();
+	p->intern_last_meal = *p->last_meal;
+	pthread_mutex_unlock(p->timestamp);
+	if (p->number_of_philosophers)
+		return (philo_limited(p));
+	else
+		return (philo_unlimited(p));
 }

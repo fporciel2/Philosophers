@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_timer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 16:23:41 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 11:03:05 by fporciel         ###   ########.fr       */
+/*   Created: 2024/03/11 12:37:26 by fporciel          #+#    #+#             */
+/*   Updated: 2024/03/11 12:53:23 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -30,42 +30,45 @@
  * please see:
  * https://github.com/fporciel2/Philosophers
  *
- * This part of the program contains the timer functions.
+ * This part of the program contains the timer's routine.
  */
 
 #include "philo.h"
 
-static void	*philo_death(t_timer *timer)
+static void	philo_deasth(t_timer *t)
 {
-	pthread_mutex_lock(timer->is_over_mutex);
-	pthread_mutex_lock(timer->stdout_mutex);
-	if (philo_timestamp() < (*timer->last_meal + timer->time_to_die + 10))
-		printf("[%lu] %lu %s\n", philo_timestamp(), timer->id, DEAD);
-	pthread_mutex_unlock(timer->timestamp);
-	while (timer->number_of_philosophers--)
-		usleep(timer->time_to_die * 1000);
-	usleep(10000);
-	pthread_mutex_unlock(timer->stdout_mutex);
-	pthread_mutex_unlock(timer->is_over_mutex);
+	pthread_mutex_lock(t->is_over_mutex);
+	if (philo_timestamp() < (*t->last_meal + t->time_to_die + 10))
+	{
+		pthread_mutex_lock(t->stdout_mutex);
+		printf("[%lu] %lu %s\n", philo_timestamp(), t->id, DEAD);
+	}
+	else
+		pthread_mutex_lock(t->stdout_mutex);
+	while (t->number_of_philosophers--)
+		usleep(t->time_to_die * 1000);
+	pthread_mutex_unlock(t->timestamp);
+	pthread_mutex_unlock(t->stdout_mutex);
+	pthread_mutex_unlock(t->is_over_mutex);
 	return (NULL);
 }
 
-void	*philo_timer(void *info)
+void	*pgilo_timer(void *info)
 {
-	t_timer	*timer;
+	t_timer	*t;
 
-	timer = (t_timer *)info;
-	pthread_mutex_lock(timer->start_mutex);
-	pthread_mutex_lock(timer->timestamp);
-	*timer->last_meal = philo_timestamp();
-	pthread_mutex_unlock(timer->timestamp);
-	pthread_mutex_unlock(timer->start_mutex);
+	t = (t_timer *)info;
+	pthread_mutex_lock(t->start_mutex);
+	pthread_mutex_unlock(t->start_mutex);
+	pthread_mutex_lock(t->timestamp);
+	*t->last_meal = philo_timestamp();
+	pthread_mutex_unlock(t->timestamp);
 	while (1)
 	{
-		pthread_mutex_lock(timer->timestamp);
-		if (philo_timestamp() >= (*timer->last_meal + timer->time_to_die))
-			return (philo_death(timer));
-		pthread_mutex_unlock(timer->timestamp);
+		pthread_mutex_lock(t->timestamp);
+		if (philo_timestamp() >= (*t->last_meal + t->time_to_die))
+			return (philo_death(t));
+		pthread_mutex_unlock(t->timestamp);
 	}
 	return (NULL);
 }
