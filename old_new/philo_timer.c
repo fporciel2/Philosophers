@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 16:23:41 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 16:37:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 11:03:05 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -42,7 +42,6 @@ static void	*philo_death(t_timer *timer)
 	if (philo_timestamp() < (*timer->last_meal + timer->time_to_die + 10))
 		printf("[%lu] %lu %s\n", philo_timestamp(), timer->id, DEAD);
 	pthread_mutex_unlock(timer->timestamp);
-	pthread_mutex_unlock(timer->start_mutex);
 	while (timer->number_of_philosophers--)
 		usleep(timer->time_to_die * 1000);
 	usleep(10000);
@@ -63,12 +62,10 @@ void	*philo_timer(void *info)
 	pthread_mutex_unlock(timer->start_mutex);
 	while (1)
 	{
-		pthread_mutex_lock(timer->start_mutex);
 		pthread_mutex_lock(timer->timestamp);
 		if (philo_timestamp() >= (*timer->last_meal + timer->time_to_die))
 			return (philo_death(timer));
 		pthread_mutex_unlock(timer->timestamp);
-		pthread_mutex_unlock(timer->start_mutex);
 	}
 	return (NULL);
 }
