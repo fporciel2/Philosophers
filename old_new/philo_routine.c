@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 11:16:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 14:59:58 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:08:17 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -102,8 +102,14 @@ static void	*philo_unlimited(t_philo *p)
 
 static void	*philo_limited(t_philo *p)
 {
+	pthread_mutex_lock(p->stdout_mutex);
+	printf("LIMITED: %lu\n", p->number_of_meals);
+	pthread_mutex_unlock(p->stdout_mutex);
 	while (p->number_of_meals--)
 	{
+		pthread_mutex_lock(p->stdout_mutex);
+		printf("LIMITED: %lu\n", p->number_of_meals);
+		pthread_mutex_unlock(p->stdout_mutex);
 		if (p->intern_last_meal == 0)
 			return (NULL);
 		philo_take_forks(p);
