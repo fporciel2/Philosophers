@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 11:16:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 14:53:11 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:59:58 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -40,7 +40,7 @@ static void	philo_eat_and_release(t_philo *p)
 	pthread_mutex_lock(p->timestamp);
 	pthread_mutex_lock(p->stdout_mutex);
 	if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
-		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
+		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, EAT);
 	else
 		p->intern_last_meal = 0;
 	pthread_mutex_unlock(p->stdout_mutex);
@@ -53,7 +53,6 @@ static void	philo_eat_and_release(t_philo *p)
 	pthread_mutex_unlock(p->timestamp);
 	pthread_mutex_unlock(p->right_fork);
 	pthread_mutex_unlock(p->left_fork);
-	pthread_mutex_unlock(p->forks_mutex);
 }
 
 static void	philo_take_forks(t_philo *p)
@@ -73,6 +72,7 @@ static void	philo_take_forks(t_philo *p)
 	else
 		p->intern_last_meal = 0;
 	pthread_mutex_unlock(p->stdout_mutex);
+	pthread_mutex_unlock(p->forks_mutex);
 }
 
 static void	*philo_unlimited(t_philo *p)
@@ -80,12 +80,7 @@ static void	*philo_unlimited(t_philo *p)
 	while (1)
 	{
 		if (p->intern_last_meal == 0)
-		{
-			pthread_mutex_lock(p->stdout_mutex);
-			printf("NOT AT ALL\n");
-			pthread_mutex_unlock(p->stdout_mutex);
 			return (NULL);
-		}
 		philo_take_forks(p);
 		philo_eat_and_release(p);
 		pthread_mutex_lock(p->stdout_mutex);
