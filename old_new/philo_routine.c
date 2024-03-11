@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 11:16:32 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 12:36:39 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 13:39:38 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -37,8 +37,8 @@
 
 static void	philo_eat_and_release(t_philo *p)
 {
-	pthread_mutex_lock(p->stdout_mutex);
 	pthread_mutex_lock(p->timestamp);
+	pthread_mutex_lock(p->stdout_mutex);
 	if (philo_timestamp() < (p->intern_last_meal + p->time_to_die))
 		printf("[%lu] %lu %s\n", philo_timestamp(), p->id, FORK);
 	else
@@ -128,7 +128,7 @@ void	*philo_routine(void *info)
 {
 	t_philo	*p;
 
-	p = (t_philo *)p;
+	p = (t_philo *)info;
 	pthread_mutex_lock(p->start_mutex);
 	pthread_mutex_unlock(p->start_mutex);
 	pthread_mutex_lock(p->timestamp);
