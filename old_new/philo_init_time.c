@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:49:24 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 09:59:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:40:34 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -59,7 +59,7 @@ static useconds_t	philo_atousec(char *str, size_t len)
 		return ((str[0] - 48) * 100 + (str[1] - 48) * 10 + (str[2] - 48));
 	else
 		return ((str[0] - 48) * 1000 + (str[1] - 48) * 100 + (str[2] - 48) * 10
-				+ (str[3] - 48));
+			+ (str[3] - 48));
 }
 
 void	philo_init_time(char *str, t_input *input, int param)

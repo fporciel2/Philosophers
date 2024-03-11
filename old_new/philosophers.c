@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 09:10:05 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/10 17:03:24 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:38:57 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -51,9 +51,9 @@ static void	philo_join_routines(t_global *data)
 static void	philo_execute_routine(t_global *data, uint64_t *i)
 {
 	pthread_create(&data->thread_philosophers[*i], NULL,
-			philo_routine, (void *)&data->philosophers[*i]);
+		philo_routine, (void *)&data->philosophers[*i]);
 	pthread_create(&data->thread_timers[*i], NULL,
-			philo_timer, (void *)&data->timers[*i]);
+		philo_timer, (void *)&data->timers[*i]);
 	(*i)++;
 }
 

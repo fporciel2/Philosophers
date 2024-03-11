@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 12:49:09 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 10:34:09 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:41:33 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -62,14 +62,14 @@ static void	philo_assign_forks(t_global *data, uint64_t i)
 {
 	if ((!(data->number_of_philosophers % 2) && !(i % 2) && (i != 1))
 		|| ((data->number_of_philosophers % 2) && !(i % 2) && (i != 1)
-		&& ((i + 1) < (data->number_of_philosophers - 2))))
+			&& ((i + 1) < (data->number_of_philosophers - 2))))
 	{
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
 		data->philosophers[i].right_fork = &data->forks[i].fork;
 		data->philosophers[i].left_fork = &data->forks[i + 1].fork;
 	}
 	else if ((!(data->number_of_philosophers % 2) && ((i % 2) || (i == 1)))
-			|| ((data->number_of_philosophers % 2) && ((i % 2) || (i == 1))
+		|| ((data->number_of_philosophers % 2) && ((i % 2) || (i == 1))
 			&& ((i + 1) < (data->number_of_philosophers - 2))))
 	{
 		data->philosophers[i].forks_mutex = data->forks[i].fmutex;
@@ -77,7 +77,7 @@ static void	philo_assign_forks(t_global *data, uint64_t i)
 		data->philosophers[i].left_fork = &data->forks[i].fork;
 	}
 	else if (((i + 1) >= (data->number_of_philosophers - 2))
-			&& (data->number_of_philosophers % 2))
+		&& (data->number_of_philosophers % 2))
 		philo_assign_last_forks(data, i);
 	else
 		return ;
