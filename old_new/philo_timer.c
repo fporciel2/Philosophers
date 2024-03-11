@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 12:37:26 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 15:30:20 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:50:22 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -69,7 +69,7 @@ void	*philo_timer(void *info)
 		if (*t->last_meal)
 		{
 			if (philo_timestamp() >= (*t->last_meal + t->time_to_die))
-			return (philo_death(t));
+				return (philo_death(t));
 		}
 		else
 		{
