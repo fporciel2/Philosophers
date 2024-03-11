@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 12:49:09 by fporciel          #+#    #+#             */
-/*   Updated: 2024/03/11 10:33:36 by fporciel         ###   ########.fr       */
+/*   Updated: 2024/03/11 10:34:09 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /* 'Philosophers' is a simulation of a solution to the dining philosophers
@@ -125,4 +125,4 @@ printf("left fork assigned: %p\n", (void *)&data->forks[i].fork);
 printf("\n\nfmutex possessed: %p ", (void *)data->philosophers[i].forks_mutex);
 printf("fmutex assigned: %p\n\n", (void *)data->forks[i].fmutex);
  *
- * /
+ */
